@@ -1,5 +1,5 @@
 [submodule "human2humanoid"]
-    path = human2humanoid
-    url = https://github.com/kvkcon/human2humanoid.git
+	path = human2humanoid
+	url = https://github.com/kvkcon/human2humanoid.git
 
 
