@@ -1,4 +1,8 @@
 
+[submodule "PHC_x1"]
+	path = PHC_x1
+	url = https://github.com/kvkcon/PHC_x1.git
+	branch = dev-x1-25dof
 
 [submodule "human2humanoid"]
 	path = human2humanoid
