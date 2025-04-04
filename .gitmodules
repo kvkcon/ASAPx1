@@ -1,4 +1,9 @@
 
+[submodule "urdf_rviz_joint"]
+	path = urdf_rviz_joint
+	url = https://github.com/kvkcon/urdf_rviz_joint.git
+	branch = main
+
 [submodule "PHC_x1"]
 	path = PHC_x1
 	url = https://github.com/kvkcon/PHC_x1.git
