@@ -13,3 +13,6 @@
 	path = human2humanoid
 	url = https://github.com/kvkcon/human2humanoid.git
 	branch = main
+[submodule "tram"]
+	path = tram
+	url = https://github.com/FMint/tram
