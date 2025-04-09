@@ -2,7 +2,7 @@
 [submodule "urdf_rviz_joint"]
 	path = urdf_rviz_joint
 	url = https://github.com/kvkcon/urdf_rviz_joint.git
-	branch = main
+	branch = exp-urdf-29dof
 
 [submodule "PHC_x1"]
 	path = PHC_x1
@@ -13,6 +13,7 @@
 	path = human2humanoid
 	url = https://github.com/kvkcon/human2humanoid.git
 	branch = main
+
 [submodule "tram"]
 	path = tram
 	url = https://github.com/FMint/tram
