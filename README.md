@@ -7,6 +7,9 @@ Learning Agile Humanoid Whole-Body Skills </h1>
 
 
 <img src="https://agile.human2humanoid.com/static/images/asap-preview-gif-480P.gif" width="400px"/>
+<video width="400" controls>
+  <source src="asset\walk_with_arm.mp4" type="video/mp4">
+</video>
 
 </div>
 
