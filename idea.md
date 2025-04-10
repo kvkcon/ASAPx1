@@ -14,4 +14,4 @@
 
 - [ ] helix
 
-  ![dual](asset\dual.png)
+  ![dual](asset/dual.png)
