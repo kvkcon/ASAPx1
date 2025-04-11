@@ -157,6 +157,8 @@ class IsaacGym(BaseSimulator):
         print(colored(f"Number of robot_config.dof_names: {len(self.robot_config.dof_names)}", "green"))
         assert self.num_dof == len(self.robot_config.dof_names), "Number of DOFs must be equal to number of actions"
         assert self.num_bodies == len(self.robot_config.body_names), "Number of bodies must be equal to number of body names"
+        print(colored(f"Number of bodies: {self.num_bodies}", "green"))
+        print(colored(f"dof_names: {self.dof_names}", "green"))
         assert self.dof_names == self.robot_config.dof_names, "DOF names must match the config"
         assert self.body_names == self.robot_config.body_names, "Body names must match the config"
 
