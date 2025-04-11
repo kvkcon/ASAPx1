@@ -42,13 +42,13 @@ python humanoidverse/train_agent.py \
 +exp=motion_tracking \
 +domain_rand=NO_domain_rand \
 +rewards=motion_tracking/reward_motion_tracking_dm_2real \
-+robot=x1/x1 \
++robot=x1/x1_29dof_leftleg \
 +terrain=terrain_locomotion_plane \
 +obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
 num_envs=4096 \
 project_name=MotionTracking \
-experiment_name=MotionTracking_Dance_Leftleg \
-robot.motion.motion_file="humanoidverse/data/motions/x1_29dof_leftleg/Test-amass-dance/singles/0-Transitions_mocap_mazen_c3d_dance_stand_poses.pkl" \
+experiment_name=MotionTracking_Punchboxing_Leftleg \
+robot.motion.motion_file="humanoidverse/data/motions/x1_29dof_leftleg/Test-amass-dance/singles/0-Transitions_mocap_mazen_c3d_punchboxing_walk_poses.pkl" \
 rewards.reward_penalty_curriculum=True \
 rewards.reward_penalty_degree=0.00001 \
 env.config.resample_motion_when_training=False \
