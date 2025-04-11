@@ -653,7 +653,7 @@
     <limit lower="-3.14" upper="3.14" effort="50.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
-  <link name="link_lleft_knee_pitch">
+  <link name="link_left_knee_pitch">
     <inertial>
       <mass value="1.68649" />
       <origin xyz="-0.000466573 -0.136803 0.0283565" rpy="0.7569674145230724 -1.3987424484961117 0.8525530086489284" />
@@ -677,7 +677,7 @@
   </link>
   <joint name="left_knee_pitch_joint" type="revolute">
     <parent link="link_left_hip_yaw" />
-    <child link="link_lleft_knee_pitch" />
+    <child link="link_left_knee_pitch" />
     <origin xyz="-0.0337 0.0 0.1422" rpy="-1.5707963267948966 0.0 -1.5707963267948966" />
     <axis xyz="0 0 1" />
     <limit lower="0.0" upper="1.8" effort="150.0" velocity="10" />
@@ -706,7 +706,7 @@
     </collision>
   </link>
   <joint name="left_ankle_pitch_joint" type="revolute">
-    <parent link="link_lleft_knee_pitch" />
+    <parent link="link_left_knee_pitch" />
     <child link="link_left_ankle_pitch" />
     <origin xyz="0.0 -0.30494 0.0336" rpy="3.141592653589793 -0.0 3.141592653589793" />
     <axis xyz="0 0 -1" />
