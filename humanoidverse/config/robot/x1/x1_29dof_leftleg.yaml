@@ -142,43 +142,42 @@ robot:
   randomize_link_body_names: [
     'x1-body', 'link_left_hip_yaw', 'link_left_hip_roll', 'link_left_hip_pitch', 'link_left_knee_pitch',
     'link_right_hip_yaw', 'link_right_hip_roll', 'link_right_hip_pitch', 'link_right_knee_pitch',
-]
+  ]
 
   # Control parameters
   control:
     control_type: P
-    joint_list:
-    stiffness:  # [N*m/rad]  #pd-zero
-      lumbar_yaw: 700.0
-      lumbar_roll: 700.0
-      lumbar_pitch: 700.0
-      left_shoulder_pitch: 300.0
-      left_shoulder_roll: 300.0
-      left_shoulder_yaw: 30.0
-      left_elbow_pitch: 300.0
-      left_elbow_yaw: 30.0
-      left_wrist_pitch: 30.0
-      left_wrist_roll: 30.0
-      right_shoulder_pitch: 300.0
-      right_shoulder_roll: 300.0
-      right_shoulder_yaw: 30.0
-      right_elbow_pitch: 300.0
-      right_elbow_yaw: 30.0
-      right_wrist_pitch: 30.0
-      right_wrist_roll: 30.0
-      left_hip_pitch: 250.0
-      left_hip_roll: 250.0
-      left_hip_yaw: 250.0
-      left_knee_pitch: 250.0
-      left_ankle_pitch: 200.0
+    stiffness:  # [N*m/rad]
+      lumbar_yaw: 200.0
+      lumbar_roll: 200.0
+      lumbar_pitch: 200.0
+      left_shoulder_pitch: 200.0
+      left_shoulder_roll: 200.0
+      left_shoulder_yaw: 50.0
+      left_elbow_pitch: 100.0
+      left_elbow_yaw: 50.0
+      left_wrist_pitch: 50.0
+      left_wrist_roll: 50.0
+      right_shoulder_pitch: 200.0
+      right_shoulder_roll: 200.0
+      right_shoulder_yaw: 50.0
+      right_elbow_pitch: 100.0
+      right_elbow_yaw: 50.0
+      right_wrist_pitch: 50.0
+      right_wrist_roll: 50.0
+      left_hip_pitch: 200.0
+      left_hip_roll: 200.0
+      left_hip_yaw: 200.0
+      left_knee_pitch: 200.0
+      left_ankle_pitch: 150.0
       left_ankle_roll: 100.0
-      right_hip_pitch: 250.0
-      right_hip_roll: 250.0
-      right_hip_yaw: 250.0
-      right_knee_pitch: 250.0
-      right_ankle_pitch: 200.0
+      right_hip_pitch: 200.0
+      right_hip_roll: 200.0
+      right_hip_yaw: 200.0
+      right_knee_pitch: 200.0
+      right_ankle_pitch: 150.0
       right_ankle_roll: 100.0
-      joint_list:
+  # joint_list:
   # - lumbar_yaw_joint: 200.0        # 腰部偏航，适中刚度，保持稳定但允许灵活扭动
   # - lumbar_roll_joint: 200.0       # 腰部横滚，适中刚度，平衡动态与稳定
   # - lumbar_pitch_joint: 250.0      # 腰部俯仰，稍高刚度，支撑上下身协调
@@ -247,14 +246,6 @@ robot:
     xml_file: "x1/x1.xml"
     robot_type: "x1"
     self_collisions: true
-
-
-  motion:
-    motion_file: 'humanoidverse/data/motions/x1/0-Transitions_mocap_mazen_c3d_dance_stand_poses.pkl'
-    asset:
-      assetRoot: "humanoidverse/data/robots/x1/"
-      assetFileName: "x1.xml"
-      urdfFileName: "urdf/x1_ros.urdf"
 
   motion:
     # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
@@ -432,6 +423,9 @@ robot:
       - [0.929, 0.867, 0.437] # right_shoulder_roll_joint
       - [0.929, 0.867, 0.437] # right_shoulder_yaw_joint
       - [0.929, 0.867, 0.437] # right_elbow_joint
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
       - [0, 0.351, 0.613] # left_elbow_joint_extend
       - [0, 0.351, 0.613] # right_elbow_joint_extend
       - [0, 0.351, 0.613] # head_link
