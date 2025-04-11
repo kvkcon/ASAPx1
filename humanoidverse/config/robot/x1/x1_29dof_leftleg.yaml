@@ -327,6 +327,7 @@ robot:
       - "head_link"
 
     lower_body_link:
+      - "x1-body"
       - "link_lumbar_yaw"
       - "link_lumbar_roll"
       - "link_lumbar_pitch"
@@ -358,6 +359,7 @@ robot:
       - "link_right_elbow_yaw"
       - "link_right_wrist_pitch"
       - "link_right_wrist_roll"
+      - "head_link"
 
 
     pelvis_link: "x1-body"
@@ -426,8 +428,11 @@ robot:
       - [0.929, 0.867, 0.437] # i don't know
       - [0.929, 0.867, 0.437] # i don't know
       - [0.929, 0.867, 0.437] # i don't know
-      - [0, 0.351, 0.613] # left_elbow_joint_extend
-      - [0, 0.351, 0.613] # right_elbow_joint_extend
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      # - [0, 0.351, 0.613] # left_elbow_joint_extend
+      # - [0, 0.351, 0.613] # right_elbow_joint_extend
       - [0, 0.351, 0.613] # head_link
 
 # Override motion lib default to use the adapted H1 variant
