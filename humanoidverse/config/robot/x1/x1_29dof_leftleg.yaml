@@ -242,7 +242,7 @@ robot:
 
   # Asset configuration
   asset:
-    urdf_file: "x1/urdf/x1_ros.urdf"
+    urdf_file: "x1/x1.urdf"
     xml_file: "x1/x1.xml"
     robot_type: "x1"
     self_collisions: true
