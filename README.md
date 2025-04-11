@@ -32,7 +32,7 @@ ASAP codebase is built on top of [HumanoidVerse](https://github.com/LeCAR-Lab/Hu
 See `README_origin.md`
 
 
-# Motion Tracking Training
+# Motion Tracking Training on x1
 
 Train a phase-based motion tracking policy to imitate dance motion from AMASS dataset
 
