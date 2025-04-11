@@ -147,6 +147,7 @@ robot:
   # Control parameters
   control:
     control_type: P
+    joint_list:
     stiffness:  # [N*m/rad]  #pd-zero
       lumbar_yaw: 700.0
       lumbar_roll: 700.0
@@ -177,6 +178,36 @@ robot:
       right_knee_pitch: 250.0
       right_ankle_pitch: 200.0
       right_ankle_roll: 100.0
+      joint_list:
+  # - lumbar_yaw_joint: 200.0        # 腰部偏航，适中刚度，保持稳定但允许灵活扭动
+  # - lumbar_roll_joint: 200.0       # 腰部横滚，适中刚度，平衡动态与稳定
+  # - lumbar_pitch_joint: 250.0      # 腰部俯仰，稍高刚度，支撑上下身协调
+  # - left_shoulder_pitch_joint: 40.0 # 左肩俯仰，低刚度，快速摆动
+  # - left_shoulder_roll_joint: 40.0  # 左肩横滚，低刚度，灵活运动
+  # - left_shoulder_yaw_joint: 40.0   # 左肩偏航，低刚度，动态协调
+  # - left_elbow_pitch_joint: 30.0    # 左肘俯仰，更低刚度，快速响应
+  # - left_elbow_yaw_joint: 30.0      # 左肘偏航，低刚度，灵活摆动
+  # - left_wrist_pitch_joint: 20.0    # 左腕俯仰，最低刚度，细腻动作
+  # - left_wrist_roll_joint: 20.0     # 左腕横滚，低刚度，自由摆动
+  # - right_shoulder_pitch_joint: 40.0 # 右肩俯仰，同左肩
+  # - right_shoulder_roll_joint: 40.0  # 右肩横滚，同左肩
+  # - right_shoulder_yaw_joint: 40.0   # 右肩偏航，同左肩
+  # - right_elbow_pitch_joint: 30.0    # 右肘俯仰，同左肘
+  # - right_elbow_yaw_joint: 30.0      # 右肘偏航，同左肘
+  # - right_wrist_pitch_joint: 20.0    # 右腕俯仰，同左腕
+  # - right_wrist_roll_joint: 20.0     # 右腕横滚，同左腕
+  # - left_hip_pitch_joint: 150.0      # 左髋俯仰，较高刚度，支撑动态步伐
+  # - left_hip_roll_joint: 120.0       # 左髋横滚，适中刚度，灵活摆动
+  # - left_hip_yaw_joint: 120.0        # 左髋偏航，适中刚度，步伐协调
+  # - left_knee_pitch_joint: 200.0     # 左膝俯仰，高刚度，支撑体重
+  # - left_ankle_pitch_joint: 100.0    # 左踝俯仰，适中刚度，适应地面
+  # - left_ankle_roll_joint: 80.0      # 左踝横滚，较低刚度，灵活调整
+  # - right_hip_pitch_joint: 150.0     # 右髋俯仰，同左髋
+  # - right_hip_roll_joint: 120.0      # 右髋横滚，同左髋
+  # - right_hip_yaw_joint: 120.0       # 右髋偏航，同左髋
+  # - right_knee_pitch_joint: 200.0    # 右膝俯仰，同左膝
+  # - right_ankle_pitch_joint: 100.0   # 右踝俯仰，同左踝
+  # - right_ankle_roll_joint: 80.0     # 右踝横滚，同左踝
     damping:  # [N*m*s/rad]
       lumbar_yaw: 0.6
       lumbar_roll: 0.6
@@ -212,7 +243,7 @@ robot:
 
   # Asset configuration
   asset:
-    urdf_file: "x1/x1.urdf"
+    urdf_file: "x1/urdf/x1_ros.urdff"
     xml_file: "x1/x1.xml"
     robot_type: "x1"
     self_collisions: true
@@ -305,35 +336,37 @@ robot:
       - "head_link"
 
     lower_body_link:
-      - "pelvis"
-      - "left_hip_pitch_link"
-      - "left_hip_roll_link"
-      - "left_hip_yaw_link"
-      - "left_knee_link"
-      - "left_ankle_pitch_link"
-      - "left_ankle_roll_link"
-      - "right_hip_pitch_link"
-      - "right_hip_roll_link"
-      - "right_hip_yaw_link"
-      - "right_knee_link"
-      - "right_ankle_pitch_link"
-      - "right_ankle_roll_link"
-      - "waist_yaw_link"
-      - "waist_roll_link"
-      - "torso_link"
+      - "link_lumbar_yaw"
+      - "link_lumbar_roll"
+      - "link_lumbar_pitch"
+      - "link_left_hip_pitch"
+      - "link_left_hip_roll"
+      - "link_left_hip_yaw"
+      - "link_left_knee_pitch"
+      - "link_left_ankle_pitch"
+      - "link_left_ankle_roll"
+      - "link_right_hip_pitch"
+      - "link_right_hip_roll"
+      - "link_right_hip_yaw"
+      - "link_right_knee_pitch"
+      - "link_right_ankle_pitch"
+      - "link_right_ankle_roll"
 
     upper_body_link:
-      - "left_shoulder_pitch_link"
-      - "left_shoulder_roll_link"
-      - "left_shoulder_yaw_link"
-      - "left_elbow_link"
-      - "right_shoulder_pitch_link"
-      - "right_shoulder_roll_link"
-      - "right_shoulder_yaw_link"
-      - "right_elbow_link"
-      - "left_hand_link"
-      - "right_hand_link"
-      - "head_link"
+      - "link_left_shoulder_pitch"
+      - "link_left_shoulder_roll"
+      - "link_left_shoulder_yaw"
+      - "link_left_elbow_pitch"
+      - "link_left_elbow_yaw"
+      - "link_left_wrist_pitch"
+      - "link_left_wrist_roll"
+      - "link_right_shoulder_pitch"
+      - "link_right_shoulder_roll"
+      - "link_right_shoulder_yaw"
+      - "link_right_elbow_pitch"
+      - "link_right_elbow_yaw"
+      - "link_right_wrist_pitch"
+      - "link_right_wrist_roll"
 
 
     pelvis_link: "pelvis"
