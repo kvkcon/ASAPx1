@@ -242,10 +242,24 @@ robot:
 
   # Asset configuration
   asset:
+    collapse_fixed_joints: True # merge bodies connected by fixed joints. Specific fixed joints can be kept by adding " <... dont_collapse="true">
+    replace_cylinder_with_capsule: True
+    flip_visual_attachments: False
+    armature: 0.001 # isaacgym armature is set by this
+    thickness: 0.01
+    max_angular_velocity: 1000.
+    max_linear_velocity: 1000.
+    density: 0.001
+    angular_damping: 0.
+    linear_damping: 0.
+
     urdf_file: "x1/x1.urdf"
+    # usd_file: "g1/${robot.asset.robot_type}.usd"
     xml_file: "x1/x1.xml"
-    robot_type: "x1"
-    self_collisions: true
+    # xml_file: "g1/${robot.asset.robot_type}_fitmotionONLY.xml"
+    robot_type: x1
+    self_collisions: 1 # 1 to disable, 0 to enable self collisions
+    default_dof_drive_mode: 3
 
   motion:
     # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
