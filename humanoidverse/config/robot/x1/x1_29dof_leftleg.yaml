@@ -253,7 +253,7 @@ robot:
     angular_damping: 0.
     linear_damping: 0.
 
-    urdf_file: "x1/x1.urdf"
+    urdf_file: "x1/urdf/x1.urdf"
     # usd_file: "g1/${robot.asset.robot_type}.usd"
     xml_file: "x1/x1.xml"
     # xml_file: "g1/${robot.asset.robot_type}_fitmotionONLY.xml"
@@ -268,7 +268,7 @@ robot:
       assetRoot: "humanoidverse/data/robots/x1/"
       # assetFileName: "g1_29dof_anneal_23dof.xml"
       assetFileName: "x1.xml"
-      urdfFileName: "urdf/x1_ros.urdf"
+      urdfFileName: "urdf/x1.urdf"
 
     humanoid_type: x1
     bias_offset: False
