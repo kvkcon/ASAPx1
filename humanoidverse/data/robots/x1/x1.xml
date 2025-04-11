@@ -198,7 +198,7 @@
             <joint name="left_hip_yaw_joint" type="hinge" pos="0 0 0" axis="0 0 -1" damping="1" range="-3.14 3.14" />
             <geom type="mesh" mesh="mesh_left_hip_yaw" pos="0 0 0" euler="-0 0 -0" rgba="0.4 1 0.4 1" />
 
-            <body name="link_lleft_knee_pitch" pos="-0.0337 0 0.1422" quat="0.5 -0.5 0.5 -0.5" gravcomp="0">
+            <body name="link_left_knee_pitch" pos="-0.0337 0 0.1422" quat="0.5 -0.5 0.5 -0.5" gravcomp="0">
               <inertial pos="-0.000466573 -0.136803 0.0283565" quat="0.549096 0.504801 -0.427727 0.510606" mass="1.68649" diaginertia="0.00989796 0.00939201 0.00196477"/>
               <joint name="left_knee_pitch_joint" type="hinge" pos="0 0 0" axis="0 0 1" damping="1" range="0.0 1.8" />
               <geom type="mesh" mesh="mesh_left_knee_pitch" pos="0 0 0" euler="-0 0 -0" rgba="0 0.5 1 1" />
