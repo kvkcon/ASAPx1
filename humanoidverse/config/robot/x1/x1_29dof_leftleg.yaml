@@ -18,8 +18,8 @@ robot:
   num_feet: 2
   right_foot_name: "link_right_ankle_roll"
   left_foot_name: "link_left_ankle_roll"
-  #foot_name: "ankle_roll_link"
-  #knee_name: "knee_link"
+  foot_name: "link_ankle_roll"
+  knee_name: "link_knee"
   has_torso: true
   torso_name: "link_lumbar_pitch" 
   has_upper_body_dof: True
