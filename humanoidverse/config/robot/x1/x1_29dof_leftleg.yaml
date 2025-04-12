@@ -95,8 +95,8 @@ robot:
     'link_right_shoulder_pitch', 'link_right_shoulder_roll', 'link_right_shoulder_yaw', 'link_right_elbow_pitch', 'link_right_elbow_yaw', 'link_right_wrist_pitch', 'link_right_wrist_roll', 
     'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
 
-  #terminate_after_contacts_on : ["base_link", "shoulder", "hip"]
-  #penalize_contacts_on: ["base_link", "shoulder", "hip"]
+  terminate_after_contacts_on : ["base_link", "shoulder", "hip"]
+  penalize_contacts_on: ["base_link", "shoulder", "hip"]
 
   # Initial state
   init_state:  #keyframe-home_default
