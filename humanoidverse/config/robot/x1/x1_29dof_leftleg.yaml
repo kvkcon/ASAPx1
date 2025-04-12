@@ -51,7 +51,7 @@ robot:
     'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint',
     'right_ankle_pitch_joint', 'right_ankle_roll_joint'
   ]
-  lumbar_dof_names: ['lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint']
+  waist_dof_names: ['lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint']
 
 
   # Joint limits
