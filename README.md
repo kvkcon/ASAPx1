@@ -59,6 +59,10 @@ env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.
 robot.asset.self_collisions=0
 ```
 
+```bash
+HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py +simulator=isaacgym +exp=motion_tracking +domain_rand=NO_domain_rand +rewards=motion_tracking/reward_motion_tracking_dm_2real +robot=x1/x1_29dof_leftleg +terrain=terrain_locomotion_plane +obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history num_envs=4096 project_name=MotionTracking experiment_name=MotionTracking_Punchboxing_Leftleg robot.motion.motion_file="humanoidverse/data/motions/x1_29dof_leftleg/Test-amass-dance/0-Transitions_mocap_mazen_c3d_punchboxing_walk_poses.pkl" rewards.reward_penalty_curriculum=True rewards.reward_penalty_degree=0.00001 env.config.resample_motion_when_training=False env.config.termination.terminate_when_motion_far=True env.config.termination_curriculum.terminate_when_motion_far_curriculum=True env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 robot.asset.self_collisions=0
+```
+
 After training, you can visualize the policy by:
 ```bash
 python humanoidverse/eval_agent.py \
