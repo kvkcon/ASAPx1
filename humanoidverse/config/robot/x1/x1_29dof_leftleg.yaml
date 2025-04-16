@@ -337,7 +337,7 @@ robot:
       - "head_link"
 
     lower_body_link:
-      - "x1-body"
+      - "base_link"
       - "link_lumbar_yaw"
       - "link_lumbar_roll"
       - "link_lumbar_pitch"
