@@ -234,6 +234,7 @@ robot:
       right_ankle_pitch: 0.6
       right_ankle_roll: 0.3
     action_scale: 0.25
+    action_clip_value: 100.0
     clip_torques: true
 
   # Asset configuration
