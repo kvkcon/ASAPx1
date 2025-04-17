@@ -318,14 +318,14 @@ robot:
 
     nums_extend_bodies: 1
     extend_config:
-      - joint_name: "left_hand_link"
-        parent_name: "link_left_elbow_yaw"
-        pos: [0.25, 0.0, 0.0]
-        rot: [1.0, 0.0, 0.0, 0.0] # w x y z
-      - joint_name: "right_hand_link"
-        parent_name: "link_right_elbow_yaw"
-        pos: [0.25, 0.0, 0.0]
-        rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+      # - joint_name: "left_hand_link"
+      #   parent_name: "link_left_elbow_yaw"
+      #   pos: [0.25, 0.0, 0.0]
+      #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+      # - joint_name: "right_hand_link"
+      #   parent_name: "link_right_elbow_yaw"
+      #   pos: [0.25, 0.0, 0.0]
+      #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
       - joint_name: "head_link"
         parent_name: "link_lumbar_pitch"
         pos: [0.0, 0.0, 0.4]
@@ -333,8 +333,8 @@ robot:
 
 
     motion_tracking_link:
-      - "left_hand_link"
-      - "right_hand_link"
+      - "link_left_wrist_roll"
+      - "link_right_wrist_roll"
       - "head_link"
 
     lower_body_link:
@@ -370,8 +370,8 @@ robot:
       - "link_right_elbow_yaw"
       - "link_right_wrist_pitch"
       - "link_right_wrist_roll"
-      - "left_hand_link"
-      - "right_hand_link"
+      - "link_left_wrist_roll"
+      - "link_right_wrist_roll"
       - "head_link"
 
 
@@ -395,10 +395,10 @@ robot:
       - ["link_right_ankle_roll", "R_Ankle"]
       - ["link_left_shoulder_roll", "L_Shoulder"]
       - ["link_left_elbow_pitch", "L_Elbow"]
-      - ["left_hand_link", "L_Hand"]
+      - ["link_left_wrist_roll", "L_Hand"]
       - ["link_right_shoulder_roll", "R_Shoulder"]
       - ["link_right_elbow_pitch", "R_Elbow"]
-      - ["right_hand_link", "R_Hand"]
+      - ["link_right_wrist_roll", "R_Hand"]
       - ["head_link", "Head"]
       # - ["left_toe_link", "L_Toe"]
       # - ["right_toe_link", "R_Toe"]
