@@ -370,8 +370,6 @@ robot:
       - "link_right_elbow_yaw"
       - "link_right_wrist_pitch"
       - "link_right_wrist_roll"
-      - "link_left_wrist_roll"
-      - "link_right_wrist_roll"
       - "head_link"
 
 
