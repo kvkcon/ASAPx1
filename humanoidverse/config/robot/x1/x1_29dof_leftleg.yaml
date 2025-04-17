@@ -444,8 +444,8 @@ robot:
       - [0.929, 0.867, 0.437] # i don't know
       - [0.929, 0.867, 0.437] # i don't know
       - [0.929, 0.867, 0.437] # i don't know
-      # - [0, 0.351, 0.613] # left_elbow_joint_extend
-      # - [0, 0.351, 0.613] # right_elbow_joint_extend
+      - [0, 0.351, 0.613] # left_hand_extend
+      - [0, 0.351, 0.613] # right_hand_extend
       - [0, 0.351, 0.613] # head_link
 
 # Override motion lib default to use the adapted H1 variant
