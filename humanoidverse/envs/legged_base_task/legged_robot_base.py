@@ -89,7 +89,7 @@ class LeggedRobotBase(BaseTask):
 
         self.need_to_refresh_envs = torch.ones(self.num_envs, dtype=torch.bool, device=self.device, requires_grad=False)
 
-        self.add_noise_currculum = self.config.obs.add_noise_currculum
+        self.add_noise_currculum = self.config.obs.add_noise_currculum   #ASAP\humanoidverse\config\obs\motion_tracking\deepmimic_a2c_nolinvel_LARGEnoise_history.yaml
         self.current_noise_curriculum_value = self.config.obs.noise_initial_value
 
     def _domain_rand_config(self):
@@ -192,7 +192,14 @@ class LeggedRobotBase(BaseTask):
         logger.info("Setting Env is evaluating")
         self.is_evaluating = True
     
-    def step(self, actor_state):
+    #env.use_delta_policy = True ——要不要加到config/env/motion_tracking.yaml?
+    def step(self,actions):
+        if self.use_delta_policy:
+            return self.delta_step(actions)
+        else:
+            return self.standard_step(actions)
+
+    def standard_step(self, actor_state):
         """ Apply actions, simulate, call self.post_physics_step()
         Args:
             actions (torch.Tensor): Tensor of shape (num_envs, num_actions_per_env)
@@ -207,6 +214,37 @@ class LeggedRobotBase(BaseTask):
         #     import ipdb; ipdb.set_trace()
 
         return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
+    
+    def delta_step(self,delta_action):
+        #enter real_s/a current frame
+        s_real = self.real_data_buffer[self.step_idx]["s"]
+        a_real = self.real_data_buffer[self.step_idx]["a"]
+
+        #s_t^r -> simulator 
+        self.set_sim_state_from_real_data(s_real)
+        
+        #a_t=a^r+delta_a
+        composed_action = a_real+delta_action
+        self._pre_physics_step(composed_action)
+
+        #reward_target s^r_{t+1}
+        #s_next_real = self.real_data_buffer[self.step_idx+1]["s"]
+        #self.reward_target = s_next_real
+        #原reward计算=target-now  #现=real-sim=target-now
+
+        #simulator execute
+        self._physics_step()
+        self._post_physics_step()
+
+        self.step_idx +=1
+        done = self.step_idx>=len(self.real_data_buffer)-1
+        self.reset_buf[:] = done
+
+        return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
+
+    def set_sim_state_from_real_data(self,s_real):
+        self.simulator.all_
+
 
     def _pre_physics_step(self, actions):
         clip_action_limit = self.config.robot.control.action_clip_value
@@ -692,6 +730,14 @@ class LeggedRobotBase(BaseTask):
     def _reward_penalty_action_rate(self):
         # Penalize changes in actions
         return torch.sum(torch.square(self.last_actions - self.actions), dim=1)
+    
+    ##add
+    def _reward_penalty_action_norm(self):
+        # Penalize the magnitude of the action
+        # r = exp(-||a_t||)-1
+        # (-1,0]
+        norm = torch.norm(self.actions,dim=1)
+        return torch.exp(-norm)-1.0
 
     def _reward_penalty_orientation(self):
         # Penalize non flat base orientation
