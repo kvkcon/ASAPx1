@@ -95,6 +95,6 @@ obs:
     - actions: ${robot.dof_obs_size}
     - dif_local_rigid_body_pos: ${eval:'3 * ${robot.num_bodies} + 3 * ${robot.motion.nums_extend_bodies}'}
     - local_ref_rigid_body_pos: ${eval:'3 * ${robot.num_bodies} + 3 * ${robot.motion.nums_extend_bodies}'}
-     - ref_motion_phase: 1
+    - ref_motion_phase: 1
 
   post_compute_config: {} # Will store values after preprocessing, don't put anything here
