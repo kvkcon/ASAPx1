@@ -5,7 +5,7 @@ import os
 from humanoidverse.envs.legged_base_task.legged_robot_base import LeggedRobotBase
 from isaac_utils.rotations import (
     my_quat_rotate,
-    quat_to_tan_norm, 
+    # quat_to_tan_norm, 
     calc_heading_quat_inv,
     calc_heading_quat,
     quat_mul,
