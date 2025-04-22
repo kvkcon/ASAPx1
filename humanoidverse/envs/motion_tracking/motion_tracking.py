@@ -610,7 +610,7 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         return r_feet
     
     def _reward_teleop_body_rotation_extend(self):
-        rotation_diff = quat_to_angle_axis(self.dif_global_body_rot, w_last=True)[0]
+        rotation_diff = quat_to_angle_axis(self.dif_global_body_rot)[0]#, w_last=True)[0]
         diff_body_rot_dist = (rotation_diff**2).mean(dim=-1)
         r_body_rot = torch.exp(-diff_body_rot_dist / self.config.rewards.reward_tracking_sigma.teleop_body_rot)
         return r_body_rot
