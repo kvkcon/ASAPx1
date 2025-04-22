@@ -5,9 +5,12 @@ import os
 from humanoidverse.envs.legged_base_task.legged_robot_base import LeggedRobotBase
 from isaac_utils.rotations import (
     my_quat_rotate,
+    quat_to_tan_norm, 
     calc_heading_quat_inv,
     calc_heading_quat,
     quat_mul,
+    quat_conjugate,
+    quat_to_angle_axis,
     quat_rotate_inverse,
     xyzw_to_wxyz,
     wxyz_to_xyzw
@@ -276,7 +279,8 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         self.dif_global_body_pos = ref_body_pos_extend - self._rigid_body_pos_extend
         # import ipdb; ipdb.set_trace()
         ## diff compute - kinematic rotation
-        self.dif_global_body_rot = ref_body_rot_extend - self._rigid_body_rot_extend
+        self.dif_global_body_rot = quat_mul(ref_body_rot_extend, quat_conjugate(self._rigid_body_rot_extend, w_last=True), w_last=True)
+        
         ## diff compute - kinematic velocity
         self.dif_global_body_vel = ref_body_vel_extend - self._rigid_body_vel_extend
         ## diff compute - kinematic angular velocity
@@ -606,8 +610,8 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         return r_feet
     
     def _reward_teleop_body_rotation_extend(self):
-        rotation_diff = self.dif_global_body_rot
-        diff_body_rot_dist = (rotation_diff**2).mean(dim=-1).mean(dim=-1)
+        rotation_diff = quat_to_angle_axis(self.dif_global_body_rot, w_last=True)[0]
+        diff_body_rot_dist = (rotation_diff**2).mean(dim=-1)
         r_body_rot = torch.exp(-diff_body_rot_dist / self.config.rewards.reward_tracking_sigma.teleop_body_rot)
         return r_body_rot
 
