@@ -216,10 +216,10 @@
                   <geom type = "sphere" size = "0.002" pos = "-0.03 -0.0408 0.07" class = "collision" />
                   <geom type = "sphere" size = "0.002" pos = "0.03 -0.0408 -0.07" class = "collision" />
                   <geom type = "sphere" size = "0.002" pos = "-0.03 -0.0408 -0.07" class = "collision" />
-                  <geom type = "sphere" size = "0.02" pos = "0.03 -0.0408 0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "-0.03 -0.0408 0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "0.03 -0.0408 -0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "-0.03 -0.0408 -0.07" rgba = "255 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "0.03 -0.0408 0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "-0.03 -0.0408 0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "0.03 -0.0408 -0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "-0.03 -0.0408 -0.07" rgba = "1 0 0 0.5" />
                 </body>
               </body>
             </body>
@@ -260,10 +260,10 @@
                   <geom type = "sphere" size = "0.002" pos = "-0.03 0.0408 0.07" class = "collision" />
                   <geom type = "sphere" size = "0.002" pos = "0.03 0.0408 -0.07" class = "collision" />
                   <geom type = "sphere" size = "0.002" pos = "-0.03 0.0408 -0.07" class = "collision" />
-                  <geom type = "sphere" size = "0.02" pos = "0.03 0.0408 0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "-0.03 0.0408 0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "0.03 0.0408 -0.07" rgba = "255 0 0 0.5" />
-                  <geom type = "sphere" size = "0.02" pos = "-0.03 0.0408 -0.07" rgba = "255 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "0.03 0.0408 0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "-0.03 0.0408 0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "0.03 0.0408 -0.07" rgba = "1 0 0 0.5" />
+                  <geom type = "sphere" size = "0.02" pos = "-0.03 0.0408 -0.07" rgba = "1 0 0 0.5" />
                 </body>
               </body>
             </body>
