@@ -216,56 +216,16 @@ class LeggedRobotBase(BaseTask):
         return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
     
     def delta_step(self,actor_state):
-        #enter real_s/a current frame
-        s_real = self.real_data_buffer[self.step_idx]["s"]
-        a_real = self.real_data_buffer[self.step_idx]["a"]
 
-        #s_t^r -> simulator 
-        self.set_sim_state_from_real_data(s_real)
-        self.need_to_refresh_envs[:] = False
-        
         #a_t=a^sim+delta_a
         actions = actor_state["actions_closed_loop"]
         delta_action = actor_state["actions"]
         composed_action = actions+delta_action
         self._pre_physics_step(composed_action)
-
-        #reward_target s^r_{t+1}
-        #s_next_real = self.real_data_buffer[self.step_idx+1]["s"]
-        #self.reward_target = s_next_real
-        #原reward计算=target-now  #现=real-sim=target-now
-
-        #simulator execute
         self._physics_step()
         self._post_physics_step()
 
-        self.step_idx +=1
-        done = self.step_idx>=len(self.real_data_buffer)-1
-        self.reset_buf[:] = done
-
         return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
-
-    def set_sim_state_from_real_data(self,s_real):
-        env_ids = torch.arange(self.num_envs,device=self.device)
-
-        #creatr root_states tensor [num_envs,13]
-        root_states = torch.zeros((self.num_envs,13),device=self.device)
-        root_states[:,0:3]=s_real["base_pos"]
-        root_states[:,3:7]=s_real["base_quat"]
-        root_states[:,7:10]=s_real["base_lin_vel"]
-        root_states[:,10:]=s_real["base_ang_vel"]
-
-        #create dof_states [num_envs,num_dof,2]
-        dof_states = torch.zeros((self.num_envs,self.num_dof,2),device=self.device)
-        dof_states[:,:,0]=s_real["q"]
-        dof_states[:,:,1]=s_real["qd"]
-
-        #write in simulator
-        self.simulator.set_actor_root_state_tensor(env_ids,root_states)
-        self.simulator.set_dof_state_tensor(env_ids,dof_states)
-
-        self.simulator.refresh_sim_tensors()
-
 
     def _pre_physics_step(self, actions):
         clip_action_limit = self.config.robot.control.action_clip_value
