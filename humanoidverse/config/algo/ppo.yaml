@@ -1,7 +1,7 @@
 # @package _global_
 
 algo:
-  _target_: humanoidverse.agents.ppo.ppo.PPO
+  _target_: humanoidverse.agents.delta_a.train_delta_a.PPODeltaA
   _recursive_: False
   config:
     num_learning_epochs: 5
@@ -11,8 +11,8 @@ algo:
     lam: 0.95
     value_loss_coef: 1.0
     entropy_coef: 0.01
-    actor_learning_rate: 1.e-3 # 5e-4 # 1.e-3
-    critic_learning_rate: 1.e-3 # 5e-4 # 1.e-3
+    actor_learning_rate: 5.e-4 # 1.e-3
+    critic_learning_rate: 5.e-4 # 1.e-3
     max_grad_norm: 1.0
     use_clipped_value_loss: True
     schedule: "adaptive"
@@ -21,11 +21,11 @@ algo:
     num_steps_per_env: 24
     save_interval: 2000
 
-    load_optimizer: True
+    load_optimizer: False
 
-    init_noise_std: 0.8
+    init_noise_std: 0.1 
 
-    num_learning_iterations: 1000000
+    num_learning_iterations: 500000
     init_at_random_ep_len: True
     eval_callbacks: null
 

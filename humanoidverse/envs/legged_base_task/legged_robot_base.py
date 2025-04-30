@@ -89,7 +89,7 @@ class LeggedRobotBase(BaseTask):
 
         self.need_to_refresh_envs = torch.ones(self.num_envs, dtype=torch.bool, device=self.device, requires_grad=False)
 
-        self.add_noise_currculum = self.config.obs.add_noise_currculum
+        self.add_noise_currculum = self.config.obs.add_noise_currculum   #ASAP\humanoidverse\config\obs\motion_tracking\deepmimic_a2c_nolinvel_LARGEnoise_history.yaml
         self.current_noise_curriculum_value = self.config.obs.noise_initial_value
 
     def _domain_rand_config(self):
@@ -192,7 +192,14 @@ class LeggedRobotBase(BaseTask):
         logger.info("Setting Env is evaluating")
         self.is_evaluating = True
     
-    def step(self, actor_state):
+    #env.use_delta_policy = True ——要不要加到config/env/motion_tracking.yaml?
+    def step(self,actions):
+        if self.use_delta_policy:
+            return self.delta_step(actions)
+        else:
+            return self.standard_step(actions)
+
+    def standard_step(self, actor_state):
         """ Apply actions, simulate, call self.post_physics_step()
         Args:
             actions (torch.Tensor): Tensor of shape (num_envs, num_actions_per_env)
@@ -205,6 +212,18 @@ class LeggedRobotBase(BaseTask):
 
         # if self.episode_length_buf[0] == 1:
         #     import ipdb; ipdb.set_trace()
+
+        return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
+    
+    def delta_step(self,actor_state):
+
+        #a_t=a^sim+delta_a
+        actions = actor_state["actions_closed_loop"]
+        delta_action = actor_state["actions"]
+        composed_action = actions+delta_action
+        self._pre_physics_step(composed_action)
+        self._physics_step()
+        self._post_physics_step()
 
         return self.obs_buf_dict, self.rew_buf, self.reset_buf, self.extras
 
@@ -692,6 +711,14 @@ class LeggedRobotBase(BaseTask):
     def _reward_penalty_action_rate(self):
         # Penalize changes in actions
         return torch.sum(torch.square(self.last_actions - self.actions), dim=1)
+    
+    ##add
+    def _reward_penalty_action_norm(self):
+        # Penalize the magnitude of the action
+        # r = exp(-||a_t||)-1
+        # (-1,0]
+        norm = torch.norm(self.actions,dim=1)
+        return torch.exp(-norm)-1.0
 
     def _reward_penalty_orientation(self):
         # Penalize non flat base orientation
