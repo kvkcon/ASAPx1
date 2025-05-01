@@ -260,7 +260,7 @@ robot:
 
   motion:
     # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
-    motion_file : 'humanoidverse/data/motions/x1_29dof_leftleg/Test-amass-dance/0-Transitions_mocap_mazen_c3d_punchboxing_walk_poses.pkl'
+    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-Transitions_mocap_mazen_c3d_walksideways_stand_poses_clip.pkl'
     asset:
       assetRoot: "humanoidverse/data/robots/x1/"
       # assetFileName: "g1_29dof_anneal_23dof.xml"
