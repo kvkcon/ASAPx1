@@ -8,11 +8,11 @@ rewards:
   set_reward_date: 20250501
   only_positive_rewards: False
   reward_scales:
-      teleop_body_position_extend: 50.0
-      teleop_vr_3point: 80.0
-      teleop_body_position_feet: 102.0
-      teleop_body_rotation_extend: 25.0
-      teleop_body_ang_velocity_extend: 25.0
+      teleop_body_position_extend: 20.0
+      teleop_vr_3point: 32.0
+      teleop_body_position_feet: 40.8
+      teleop_body_rotation_extend: 10.0
+      teleop_body_ang_velocity_extend: 10.0
       teleop_body_velocity_extend: 0.5
       teleop_joint_position: 0.75
       teleop_joint_velocity: 0.5
