@@ -1,0 +1,461 @@
+# @package _global_
+defaults:
+  - robot_base
+
+robot:
+  # Observation parameters
+  num_bodies: 30
+  dof_obs_size: 29
+  actions_dim: 29
+  lower_body_actions_dim: 12
+  upper_body_actions_dim: 17
+  policy_obs_dim: -1 #45
+  critic_obs_dim: -1 #683
+
+  # Body identification
+  key_bodies: ["link_left_ankle_roll", "link_right_ankle_roll"]
+  contact_bodies: ["link_left_ankle_roll", "link_right_ankle_roll"]
+  num_feet: 2
+  right_foot_name: "link_right_ankle_roll"
+  left_foot_name: "link_left_ankle_roll"
+  foot_name: "ankle_roll"
+  knee_name: "knee_pitch"
+  has_torso: true
+  torso_name: "link_lumbar_pitch" 
+  has_upper_body_dof: True
+  # Joint configuration
+  dof_names: [
+    'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
+    'lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint', 
+    'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint', 
+    'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint', 
+    'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint'
+  ]
+  upper_dof_names: [
+    'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint',
+    'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint',
+    'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint',
+    'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint'
+  ]
+  upper_left_arm_dof_names: [
+    'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint',
+    'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint'
+  ]
+  upper_right_arm_dof_names: [
+    'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint',
+    'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint'
+  ]
+  lower_dof_names: [
+    'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint',
+    'left_ankle_pitch_joint', 'left_ankle_roll_joint',
+    'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint',
+    'right_ankle_pitch_joint', 'right_ankle_roll_joint'
+  ]
+  waist_dof_names: ['lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint']
+
+
+  # Joint limits
+  dof_pos_lower_limit_list: [
+    -3.14, -2.3, -3.14, 0.0, -1.0, -1.0,            # Left leg
+    -3.14, -0.5, -0.3,                              # Lumbar
+    -3.14, -3.14, -3.14, 0.0, -3.14, -3.14, -3.14,  # Left arm
+    -3.14, -3.14, -3.14, 0.0, -3.14, -3.14, -3.14,  # Right arm
+    -6.28, -0.8, -3.14, 0.0, -1.0, -1.0             # Right leg
+  ]
+  dof_pos_upper_limit_list: [
+    6.28, 0.8, 3.14, 1.8, 1.0, 1.0,                 # Left leg
+    3.14, 0.5, 1.57,                                # Lumbar
+    3.14, 0.0, 3.14, 1.7, 3.14, 3.14, 3.14,         # Left arm
+    3.14, 0.0, 3.14, 1.7, 3.14, 3.14, 3.14,         # Right arm
+    3.14, 2.3, 3.14, 1.8, 1.0, 1.0                  # Right leg
+  ]
+  dof_vel_limit_list: [
+    10.0, 10.0, 10.0, 10.0, 10.0, 10.0,             # Left leg
+    10.0, 10.0, 10.0,                               # Lumbar
+    10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,       # Left arm
+    10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,       # Right arm
+    10.0, 10.0, 10.0, 10.0, 10.0, 10.0              # Right leg
+  ]
+  dof_effort_limit_list: [
+    150.0, 50.0, 50.0, 150.0, 18.0, 18.0,           # Left leg
+    150.0, 150.0, 150.0,                            # Lumbar
+    150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0,  # Left arm
+    150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0,  # Right arm
+    150.0, 50.0, 50.0, 150.0, 18.0, 18.0            # Right leg
+  ]
+
+  # only apply for isaacsim
+  #dof_armature_list:
+  #dof_joint_friction_list:
+
+  body_names: ['base_link', 
+    'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
+    'link_lumbar_yaw', 'link_lumbar_roll', 'link_lumbar_pitch', 
+    'link_left_shoulder_pitch', 'link_left_shoulder_roll', 'link_left_shoulder_yaw', 'link_left_elbow_pitch', 'link_left_elbow_yaw', 'link_left_wrist_pitch', 'link_left_wrist_roll', 
+    'link_right_shoulder_pitch', 'link_right_shoulder_roll', 'link_right_shoulder_yaw', 'link_right_elbow_pitch', 'link_right_elbow_yaw', 'link_right_wrist_pitch', 'link_right_wrist_roll', 
+    'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
+
+  terminate_after_contacts_on : ["base_link", "shoulder", "hip"]
+  penalize_contacts_on: ["base_link", "shoulder", "hip"]
+
+  # Initial state
+  init_state:  #keyframe-home_default
+    pos: [0.0, 0.0, 0.7]  # x,y,z [m] 
+    rot: [0.0, 0.0, 0.0, 1.0] # x,y,z,w [quat]
+    lin_vel: [0.0, 0.0, 0.0]  # x,y,z [m/s]
+    ang_vel: [0.0, 0.0, 0.0]  # x,y,z [rad/s]
+    default_joint_angles:
+      lumbar_yaw_joint: 0.0
+      lumbar_roll_joint: 0.0
+      lumbar_pitch_joint: 0.0
+      left_shoulder_pitch_joint: 0.0
+      left_shoulder_roll_joint: 0.0
+      left_shoulder_yaw_joint: 0.0
+      left_elbow_pitch_joint: 0.0
+      left_elbow_yaw_joint: 0.0
+      left_wrist_pitch_joint: 0.0
+      left_wrist_roll_joint: 0.0
+      right_shoulder_pitch_joint: 0.0
+      right_shoulder_roll_joint: 0.0
+      right_shoulder_yaw_joint: 0.0
+      right_elbow_pitch_joint: 0.0
+      right_elbow_yaw_joint: 0.0
+      right_wrist_pitch_joint: 0.0
+      right_wrist_roll_joint: 0.0
+      left_hip_pitch_joint: 0.0
+      left_hip_roll_joint: 0.0
+      left_hip_yaw_joint: 0.0
+      left_knee_pitch_joint: 0.0
+      left_ankle_pitch_joint: 0.0
+      left_ankle_roll_joint: 0.0
+      right_hip_pitch_joint: 0.0
+      right_hip_roll_joint: 0.0
+      right_hip_yaw_joint: 0.0
+      right_knee_pitch_joint: 0.0
+      right_ankle_pitch_joint: 0.0
+      right_ankle_roll_joint: 0.0
+
+  randomize_link_body_names: [
+    'base_link', 'link_left_hip_yaw', 'link_left_hip_roll', 'link_left_hip_pitch', 'link_left_knee_pitch',
+    'link_right_hip_yaw', 'link_right_hip_roll', 'link_right_hip_pitch', 'link_right_knee_pitch',
+  ]
+
+  # Control parameters
+  control:
+    control_type: P
+    stiffness:  # [N*m/rad]
+      lumbar_yaw: 200.0
+      lumbar_roll: 200.0
+      lumbar_pitch: 200.0
+      left_shoulder_pitch: 200.0
+      left_shoulder_roll: 200.0
+      left_shoulder_yaw: 50.0
+      left_elbow_pitch: 100.0
+      left_elbow_yaw: 50.0
+      left_wrist_pitch: 50.0
+      left_wrist_roll: 50.0
+      right_shoulder_pitch: 200.0
+      right_shoulder_roll: 200.0
+      right_shoulder_yaw: 50.0
+      right_elbow_pitch: 100.0
+      right_elbow_yaw: 50.0
+      right_wrist_pitch: 50.0
+      right_wrist_roll: 50.0
+      left_hip_pitch: 200.0
+      left_hip_roll: 200.0
+      left_hip_yaw: 200.0
+      left_knee_pitch: 200.0
+      left_ankle_pitch: 150.0
+      left_ankle_roll: 100.0
+      right_hip_pitch: 200.0
+      right_hip_roll: 200.0
+      right_hip_yaw: 200.0
+      right_knee_pitch: 200.0
+      right_ankle_pitch: 150.0
+      right_ankle_roll: 100.0
+  # joint_list:
+  # - lumbar_yaw_joint: 200.0        # 腰部偏航，适中刚度，保持稳定但允许灵活扭动
+  # - lumbar_roll_joint: 200.0       # 腰部横滚，适中刚度，平衡动态与稳定
+  # - lumbar_pitch_joint: 250.0      # 腰部俯仰，稍高刚度，支撑上下身协调
+  # - left_shoulder_pitch_joint: 40.0 # 左肩俯仰，低刚度，快速摆动
+  # - left_shoulder_roll_joint: 40.0  # 左肩横滚，低刚度，灵活运动
+  # - left_shoulder_yaw_joint: 40.0   # 左肩偏航，低刚度，动态协调
+  # - left_elbow_pitch_joint: 30.0    # 左肘俯仰，更低刚度，快速响应
+  # - left_elbow_yaw_joint: 30.0      # 左肘偏航，低刚度，灵活摆动
+  # - left_wrist_pitch_joint: 20.0    # 左腕俯仰，最低刚度，细腻动作
+  # - left_wrist_roll_joint: 20.0     # 左腕横滚，低刚度，自由摆动
+  # - right_shoulder_pitch_joint: 40.0 # 右肩俯仰，同左肩
+  # - right_shoulder_roll_joint: 40.0  # 右肩横滚，同左肩
+  # - right_shoulder_yaw_joint: 40.0   # 右肩偏航，同左肩
+  # - right_elbow_pitch_joint: 30.0    # 右肘俯仰，同左肘
+  # - right_elbow_yaw_joint: 30.0      # 右肘偏航，同左肘
+  # - right_wrist_pitch_joint: 20.0    # 右腕俯仰，同左腕
+  # - right_wrist_roll_joint: 20.0     # 右腕横滚，同左腕
+  # - left_hip_pitch_joint: 150.0      # 左髋俯仰，较高刚度，支撑动态步伐
+  # - left_hip_roll_joint: 120.0       # 左髋横滚，适中刚度，灵活摆动
+  # - left_hip_yaw_joint: 120.0        # 左髋偏航，适中刚度，步伐协调
+  # - left_knee_pitch_joint: 200.0     # 左膝俯仰，高刚度，支撑体重
+  # - left_ankle_pitch_joint: 100.0    # 左踝俯仰，适中刚度，适应地面
+  # - left_ankle_roll_joint: 80.0      # 左踝横滚，较低刚度，灵活调整
+  # - right_hip_pitch_joint: 150.0     # 右髋俯仰，同左髋
+  # - right_hip_roll_joint: 120.0      # 右髋横滚，同左髋
+  # - right_hip_yaw_joint: 120.0       # 右髋偏航，同左髋
+  # - right_knee_pitch_joint: 200.0    # 右膝俯仰，同左膝
+  # - right_ankle_pitch_joint: 100.0   # 右踝俯仰，同左踝
+  # - right_ankle_roll_joint: 80.0     # 右踝横滚，同左踝
+    damping:  # [N*m*s/rad]
+      lumbar_yaw: 0.6
+      lumbar_roll: 0.6
+      lumbar_pitch: 0.6
+      left_shoulder_pitch: 0.6
+      left_shoulder_roll: 0.6
+      left_shoulder_yaw: 0.1
+      left_elbow_pitch: 0.6
+      left_elbow_yaw: 0.1
+      left_wrist_pitch: 0.1
+      left_wrist_roll: 0.1
+      right_shoulder_pitch: 0.6
+      right_shoulder_roll: 0.6
+      right_shoulder_yaw: 0.1
+      right_elbow_pitch: 0.6
+      right_elbow_yaw: 0.1
+      right_wrist_pitch: 0.1
+      right_wrist_roll: 0.1
+      left_hip_pitch: 0.4
+      left_hip_roll: 0.4
+      left_hip_yaw: 0.4
+      left_knee_pitch: 0.4
+      left_ankle_pitch: 0.6
+      left_ankle_roll: 0.3
+      right_hip_pitch: 0.4
+      right_hip_roll: 0.4
+      right_hip_yaw: 0.4
+      right_knee_pitch: 0.4
+      right_ankle_pitch: 0.6
+      right_ankle_roll: 0.3
+    action_scale: 0.25
+    action_clip_value: 100.0
+    clip_torques: true
+
+  # Asset configuration
+  asset:
+    collapse_fixed_joints: True # merge bodies connected by fixed joints. Specific fixed joints can be kept by adding " <... dont_collapse="true">
+    replace_cylinder_with_capsule: True
+    flip_visual_attachments: False
+    armature: 0.001 # isaacgym armature is set by this
+    thickness: 0.01
+    max_angular_velocity: 1000.
+    max_linear_velocity: 1000.
+    density: 0.001
+    angular_damping: 0.
+    linear_damping: 0.
+
+    urdf_file: "x1/urdf/x1_23dof.urdf"
+    # usd_file: "g1/${robot.asset.robot_type}.usd"
+    xml_file: "x1/x1_23dof.xml"
+    # xml_file: "g1/${robot.asset.robot_type}_fitmotionONLY.xml"
+    robot_type: x1
+    self_collisions: 1 # 1 to disable, 0 to enable self collisions
+    default_dof_drive_mode: 3
+
+  motion:
+    # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
+    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-Transitions_mocap_mazen_c3d_walksideways_stand_poses_clip.pkl'
+    asset:
+      assetRoot: "humanoidverse/data/robots/x1/"
+      # assetFileName: "g1_29dof_anneal_23dof.xml"
+      assetFileName: "x1.xml"
+      urdfFileName: "urdf/x1.urdf"
+
+    humanoid_type: x1
+    bias_offset: False
+    has_self_collision: True
+    has_mesh: False
+    has_jt_limit: False
+    has_dof_subset: True
+    has_upright_start: True
+    has_smpl_pd_offset: False
+    remove_toe: False # For humanoid's geom toe
+    motion_sym_loss: False
+    sym_loss_coef: 1
+    big_ankle: True
+
+    has_shape_obs: false
+    has_shape_obs_disc: false
+    has_shape_variation: False
+
+    masterfoot: False
+    freeze_toe: false
+    freeze_hand: False
+    box_body: True
+    real_weight: True
+    real_weight_porpotion_capsules: True
+    real_weight_porpotion_boxes: True
+
+    body_names: ['x1-body', 
+                 'link_lumbar_yaw', 'link_lumbar_roll', 'link_lumbar_pitch', 
+                 'link_left_shoulder_pitch', 'link_left_shoulder_roll', 'link_left_shoulder_yaw', 'link_left_elbow_pitch', 'link_left_elbow_yaw', 'link_left_wrist_pitch', 'link_left_wrist_roll', 
+                 'link_right_shoulder_pitch', 'link_right_shoulder_roll', 'link_right_shoulder_yaw', 'link_right_elbow_pitch', 'link_right_elbow_yaw', 'link_right_wrist_pitch', 'link_right_wrist_roll', 
+                 'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
+                 'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
+    
+    # limb_weight_group: 
+    #   - ['left_hip_pitch', 'left_hip_roll', 'left_hip_yaw', 'left_knee_pitch', 'left_ankle_pitch', 'left_ankle_roll', 'leg_l_toe_a_link', 'leg_l_toe_a_ball', 'leg_l_toe_a_loop', 'leg_l_toe_b_link', 'leg_l_toe_b_ball', 'leg_l_toe_b_loop']
+    #   - ['right_hip_pitch', 'right_hip_roll', 'right_hip_yaw', 'right_knee_pitch', 'right_ankle_pitch', 'right_ankle_roll', 'leg_r_toe_a_link', 'leg_r_toe_a_ball', 'leg_r_toe_a_loop', 'leg_r_toe_b_link', 'leg_r_toe_b_ball', 'leg_r_toe_b_loop']
+    #   - ['base_link_simple', 'lumber_yaw', 'lumber_roll', 'lumber_pitch']
+    #   - ['left_shoulder_pitch', 'left_shoulder_roll', 'left_shoulder_yaw', 'left_elbow_pitch', 'left_elbow_yaw', 'left_wrist_pitch']
+    #   - ['right_shoulder_pitch', 'right_shoulder_roll', 'right_shoulder_yaw', 'right_elbow_pitch', 'right_elbow_yaw', 'right_wrist_pitch']
+
+    dof_names: ['lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint', 
+                'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint', 
+                'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint', 
+                'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
+                'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint']
+
+    right_foot_name: 'r_foot_roll'
+    left_foot_name: 'l_foot_roll'
+
+
+    nums_extend_bodies: 1
+    extend_config:
+      # - joint_name: "left_hand_link"
+      #   parent_name: "link_left_elbow_yaw"
+      #   pos: [0.25, 0.0, 0.0]
+      #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+      # - joint_name: "right_hand_link"
+      #   parent_name: "link_right_elbow_yaw"
+      #   pos: [0.25, 0.0, 0.0]
+      #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+      - joint_name: "head_link"
+        parent_name: "link_lumbar_pitch"
+        pos: [0.0, 0.0, 0.4]
+        rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+
+
+    motion_tracking_link:
+      - "link_left_wrist_roll"
+      - "link_right_wrist_roll"
+      - "head_link"
+
+    lower_body_link:
+      - "base_link"
+      - "link_lumbar_yaw"
+      - "link_lumbar_roll"
+      - "link_lumbar_pitch"
+      - "link_left_hip_pitch"
+      - "link_left_hip_roll"
+      - "link_left_hip_yaw"
+      - "link_left_knee_pitch"
+      - "link_left_ankle_pitch"
+      - "link_left_ankle_roll"
+      - "link_right_hip_pitch"
+      - "link_right_hip_roll"
+      - "link_right_hip_yaw"
+      - "link_right_knee_pitch"
+      - "link_right_ankle_pitch"
+      - "link_right_ankle_roll"
+
+    upper_body_link:
+      - "link_left_shoulder_pitch"
+      - "link_left_shoulder_roll"
+      - "link_left_shoulder_yaw"
+      - "link_left_elbow_pitch"
+      - "link_left_elbow_yaw"
+      - "link_left_wrist_pitch"
+      - "link_left_wrist_roll"
+      - "link_right_shoulder_pitch"
+      - "link_right_shoulder_roll"
+      - "link_right_shoulder_yaw"
+      - "link_right_elbow_pitch"
+      - "link_right_elbow_yaw"
+      - "link_right_wrist_pitch"
+      - "link_right_wrist_roll"
+      - "head_link"
+
+
+    pelvis_link: "x1-body"
+    base_link: "link_lumbar_pitch"
+    hips_link:
+      - "link_left_hip_pitch"
+      - "link_left_hip_roll"
+      - "link_left_hip_yaw"
+      - "link_right_hip_pitch"
+      - "link_right_hip_roll"
+      - "link_right_hip_yaw"
+    
+    joint_matches:
+      - ["link_lumbar_pitch", "Pelvis"]
+      - ["link_left_hip_roll", "L_Hip"]
+      - ["link_left_knee_pitch", "L_Knee"]
+      - ["link_left_ankle_roll", "L_Ankle"]
+      - ["link_right_hip_roll", "R_Hip"]
+      - ["link_right_knee_pitch", "R_Knee"]
+      - ["link_right_ankle_roll", "R_Ankle"]
+      - ["link_left_shoulder_roll", "L_Shoulder"]
+      - ["link_left_elbow_pitch", "L_Elbow"]
+      - ["link_left_wrist_roll", "L_Hand"]
+      - ["link_right_shoulder_roll", "R_Shoulder"]
+      - ["link_right_elbow_pitch", "R_Elbow"]
+      - ["link_right_wrist_roll", "R_Hand"]
+      - ["head_link", "Head"]
+      # - ["left_toe_link", "L_Toe"]
+      # - ["right_toe_link", "R_Toe"]
+
+
+    smpl_pose_modifier:
+      - Pelvis: "[np.pi/2, 0, np.pi/2]"
+      # - L_Shoulder: "[0, 0, -np.pi/2]"
+      # - R_Shoulder: "[0, 0, np.pi/2]"
+      # - L_Elbow: "[0, -np.pi/2, 0]"
+      # - R_Elbow: "[0, np.pi/2, 0]"
+
+    visualization:
+      customize_color : True
+      marker_joint_colors : 
+      - [0.929, 0.867, 0.437] # pelvis
+      - [0.929, 0.867, 0.437] # left_hip_yaw_joint
+      - [0.929, 0.867, 0.437] # left_hip_roll_joint
+      - [0.929, 0.867, 0.437] # left_hip_pitch_joint
+      - [0.929, 0.867, 0.437] # left_knee_joint
+      - [0.929, 0.867, 0.437] # left_ankle_pitch_joint
+      - [0.929, 0.867, 0.437] # left_ankle_roll_joint
+      - [0.929, 0.867, 0.437] # right_hip_yaw_joint
+      - [0.929, 0.867, 0.437] # right_hip_roll_joint
+      - [0.929, 0.867, 0.437] # right_hip_pitch_joint
+      - [0.929, 0.867, 0.437] # right_knee_joint
+      - [0.929, 0.867, 0.437] # right_ankle_pitch_joint
+      - [0.929, 0.867, 0.437] # right_ankle_roll_joint
+      - [0.929, 0.867, 0.437] # waist_yaw_joint
+      - [0.929, 0.867, 0.437] # waist_roll_joint
+      - [0.929, 0.867, 0.437] # torso_joint (waist_pitch_link)
+      - [0.929, 0.867, 0.437] # left_shoulder_pitch_joint
+      - [0.929, 0.867, 0.437] # left_shoulder_roll_joint
+      - [0.929, 0.867, 0.437] # left_shoulder_yaw_joint
+      - [0.929, 0.867, 0.437] # left_elbow_joint
+      - [0.929, 0.867, 0.437] # right_shoulder_pitch_joint
+      - [0.929, 0.867, 0.437] # right_shoulder_roll_joint
+      - [0.929, 0.867, 0.437] # right_shoulder_yaw_joint
+      - [0.929, 0.867, 0.437] # right_elbow_joint
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0.929, 0.867, 0.437] # i don't know
+      - [0, 0.351, 0.613] # left_hand_extend
+      - [0, 0.351, 0.613] # right_hand_extend
+      - [0, 0.351, 0.613] # head_link
+
+# Override motion lib default to use the adapted H1 variant
+# motion_lib:
+#   _target_: phys_anim.utils.motion_lib_h1.H1_MotionLib
+
+# Override simulation config to use the adapted H1 variant
+# env:
+#   config:
+#     simulator:
+#       sim:
+#         fps: 200 # 1/dt , dt = 0.005
+#         control_freq_inv: 4  # decimation
+#         substeps: 1
+
