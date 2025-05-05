@@ -118,17 +118,17 @@
 
                     <body name="link_left_elbow_yaw" pos="0 0.117 0.031" quat="0.499999 0.499999 -0.500001 0.500001" gravcomp="0">
                       <inertial pos="-0.00441829 -0.0011133 -0.0671345" quat="0.990089 0.12403 0.00491944 -0.065691" mass="0.803869" diaginertia="0.00198622 0.00186177 0.000729748"/>
-                      <joint name="left_elbow_yaw_joint" type="hinge" pos="0 0 0" axis="0 0 1" damping="1" range="0 0" />
+                      <joint name="left_elbow_yaw_joint" type="fixed" pos="0 0 0" axis="0 0 1" damping="1" range="0 0" />
                       <geom type="mesh" mesh="mesh_left_elbow_yaw" pos="0 0 0" euler="-0 0 -0" rgba="0.8 1.0 0.8 1" />
 
                       <body name="link_left_wrist_pitch" pos="0.006 9.9998e-05 -0.1394" quat="0.707105 0.707108 0 0" gravcomp="0">
                         <inertial pos="-9.994e-05 0 0.00229425" quat="0.5 0.5 0.5 0.5" mass="0.00900738" diaginertia="5.7e-07 3.8e-07 2.4e-07"/>
-                        <joint name="left_wrist_pitch_joint" type="hinge" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
+                        <joint name="left_wrist_pitch_joint" type="fixed" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
                         <geom type="mesh" mesh="mesh_left_wrist_pitch" pos="0 0 0" euler="-0 0 -0" rgba="1 0.5 1 1" />
 
                         <body name="link_left_wrist_roll" pos="0 0 0" quat="0.707106 7.94894e-07 0.707108 7.94894e-07" gravcomp="0">
                           <inertial pos="-0.0206623 -0.0314139 -0.00356965" quat="0.373433 0.844098 -0.329445 0.198775" mass="0.370899" diaginertia="0.000404077 0.000356841 0.000211598"/>
-                          <joint name="left_wrist_roll_joint" type="hinge" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
+                          <joint name="left_wrist_roll_joint" type="fixed" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
                           <geom type="mesh" mesh="mesh_left_wrist_roll" pos="0 0 0" euler="-0 0 -0" rgba="1 0.4 0.4 1" />
                         </body>
                       </body>
@@ -160,17 +160,17 @@
 
                     <body name="link_right_elbow_yaw" pos="0 -0.117 0.031" quat="0.499999 -0.499999 -0.500001 -0.500001" gravcomp="0">
                       <inertial pos="-0.00403154 -0.00910945 -0.047197" quat="0.994559 0.0793425 -0.0232128 -0.0633939" mass="0.573838" diaginertia="0.00105729 0.000985489 0.000647245"/>
-                      <joint name="right_elbow_yaw_joint" type="hinge" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
+                      <joint name="right_elbow_yaw_joint" type="fixed" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
                       <geom type="mesh" mesh="mesh_right_elbow_yaw" pos="0 0 0" euler="-0 0 -0" rgba="0.8 1.0 0.8 1" />
 
                       <body name="link_right_wrist_pitch" pos="0.006 9.9998e-05 -0.1394" quat="0.707105 0.707108 0 0" gravcomp="0">
                         <inertial pos="-9.994e-05 0 0.00229425" quat="0.5 0.5 0.5 0.5" mass="0.00900738" diaginertia="5.7e-07 3.8e-07 2.4e-07"/>
-                        <joint name="right_wrist_pitch_joint" type="hinge" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
+                        <joint name="right_wrist_pitch_joint" type="fixed" pos="0 0 0" axis="0 0 -1" damping="1" range="0 0" />
                         <geom type="mesh" mesh="mesh_right_wrist_pitch" pos="0 0 0" euler="-0 0 -0" rgba="1 0.5 1 1" />
 
                         <body name="link_right_wrist_roll" pos="0 0 0" quat="0.707106 7.94894e-07 0.707108 7.94894e-07" gravcomp="0">
                           <inertial pos="-0.0206623 -0.0314139 -0.00356965" quat="0.373433 0.844098 -0.329445 0.198775" mass="0.370899" diaginertia="0.000404077 0.000356841 0.000211598"/>
-                          <joint name="right_wrist_roll_joint" type="hinge" pos="0 0 0" axis="0 0 1" damping="1" range="0 0" />
+                          <joint name="right_wrist_roll_joint" type="fixed" pos="0 0 0" axis="0 0 1" damping="1" range="0 0" />
                           <geom type="mesh" mesh="mesh_right_wrist_roll" pos="0 0 0" euler="-0 0 -0" rgba="1 0.4 0.4 1" />
                         </body>
                       </body>
@@ -282,17 +282,11 @@
     <motor name="left_shoulder_roll_joint" joint="left_shoulder_roll_joint" ctrlrange="-150 150" />
     <motor name="left_shoulder_yaw_joint" joint="left_shoulder_yaw_joint" ctrlrange="-150 150" />
     <motor name="left_elbow_pitch_joint" joint="left_elbow_pitch_joint" ctrlrange="-150 150" />
-    <motor name="left_elbow_yaw_joint" joint="left_elbow_yaw_joint" ctrlrange="0 0" />
-    <motor name="left_wrist_pitch_joint" joint="left_wrist_pitch_joint" ctrlrange="0 0" />
-    <motor name="left_wrist_roll_joint" joint="left_wrist_roll_joint" ctrlrange="0 0" />
 
     <motor name="right_shoulder_pitch_joint" joint="right_shoulder_pitch_joint" ctrlrange="-150 150" />
     <motor name="right_shoulder_roll_joint" joint="right_shoulder_roll_joint" ctrlrange="-150 150" />
     <motor name="right_shoulder_yaw_joint" joint="right_shoulder_yaw_joint" ctrlrange="-150 150" />
     <motor name="right_elbow_pitch_joint" joint="right_elbow_pitch_joint" ctrlrange="-150 150" />
-    <motor name="right_elbow_yaw_joint" joint="right_elbow_yaw_joint" ctrlrange="0 0" />
-    <motor name="right_wrist_pitch_joint" joint="right_wrist_pitch_joint" ctrlrange="0 0" />
-    <motor name="right_wrist_roll_joint" joint="right_wrist_roll_joint" ctrlrange="0 0" />
 
     <motor name="left_hip_pitch_joint" joint="left_hip_pitch_joint" ctrlrange="-150 150" />
     <motor name="left_hip_roll_joint" joint="left_hip_roll_joint" ctrlrange="-50 50" />
@@ -326,17 +320,11 @@
     <jointpos name = "jointpos_left_shoulder_roll" joint = "left_shoulder_roll_joint" noise = "0" />
     <jointpos name = "jointpos_left_shoulder_yaw" joint = "left_shoulder_yaw_joint" noise = "0" />
     <jointpos name = "jointpos_left_elbow_pitch" joint = "left_elbow_pitch_joint" noise = "0" />
-    <jointpos name = "jointpos_left_elbow_yaw" joint = "left_elbow_yaw_joint" noise = "0" />
-    <jointpos name = "jointpos_left_wrist_pitch" joint = "left_wrist_pitch_joint" noise = "0" />
-    <jointpos name = "jointpos_left_wrist_roll" joint = "left_wrist_roll_joint" noise = "0" />
 
     <jointpos name = "jointpos_right_shoulder_pitch" joint = "right_shoulder_pitch_joint" noise = "0" />
     <jointpos name = "jointpos_right_shoulder_roll" joint = "right_shoulder_roll_joint" noise = "0" />
     <jointpos name = "jointpos_right_shoulder_yaw" joint = "right_shoulder_yaw_joint" noise = "0" />
     <jointpos name = "jointpos_right_elbow_pitch" joint = "right_elbow_pitch_joint" noise = "0" />
-    <jointpos name = "jointpos_right_elbow_yaw" joint = "right_elbow_yaw_joint" noise = "0" />
-    <jointpos name = "jointpos_right_wrist_pitch" joint = "right_wrist_pitch_joint" noise = "0" />
-    <jointpos name = "jointpos_right_wrist_roll" joint = "right_wrist_roll_joint" noise = "0" />
 
     <jointpos name = "jointpos_left_hip_pitch" joint = "left_hip_pitch_joint" noise = "0" />
     <jointpos name = "jointpos_left_hip_roll" joint = "left_hip_roll_joint" noise = "0" />
@@ -361,17 +349,11 @@
     <jointvel name = "jointvel_left_shoulder_roll" joint = "left_shoulder_roll_joint" noise = "0" />
     <jointvel name = "jointvel_left_shoulder_yaw" joint = "left_shoulder_yaw_joint" noise = "0" />
     <jointvel name = "jointvel_left_elbow_pitch" joint = "left_elbow_pitch_joint" noise = "0" />
-    <jointvel name = "jointvel_left_elbow_yaw" joint = "left_elbow_yaw_joint" noise = "0" />
-    <jointvel name = "jointvel_left_wrist_pitch" joint = "left_wrist_pitch_joint" noise = "0" />
-    <jointvel name = "jointvel_left_wrist_roll" joint = "left_wrist_roll_joint" noise = "0" />
 
     <jointvel name = "jointvel_right_shoulder_pitch" joint = "right_shoulder_pitch_joint" noise = "0" />
     <jointvel name = "jointvel_right_shoulder_roll" joint = "right_shoulder_roll_joint" noise = "0" />
     <jointvel name = "jointvel_right_shoulder_yaw" joint = "right_shoulder_yaw_joint" noise = "0" />
     <jointvel name = "jointvel_right_elbow_pitch" joint = "right_elbow_pitch_joint" noise = "0" />
-    <jointvel name = "jointvel_right_elbow_yaw" joint = "right_elbow_yaw_joint" noise = "0" />
-    <jointvel name = "jointvel_right_wrist_pitch" joint = "right_wrist_pitch_joint" noise = "0" />
-    <jointvel name = "jointvel_right_wrist_roll" joint = "right_wrist_roll_joint" noise = "0" />
 
     <jointvel name = "jointvel_left_hip_pitch" joint = "left_hip_pitch_joint" noise = "0" />
     <jointvel name = "jointvel_left_hip_roll" joint = "left_hip_roll_joint" noise = "0" />
@@ -396,17 +378,11 @@
     <jointactuatorfrc name = "jointeffort_left_shoulder_roll" joint = "left_shoulder_roll_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_left_shoulder_yaw" joint = "left_shoulder_yaw_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_left_elbow_pitch" joint = "left_elbow_pitch_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_left_elbow_yaw" joint = "left_elbow_yaw_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_left_wrist_pitch" joint = "left_wrist_pitch_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_left_wrist_roll" joint = "left_wrist_roll_joint" noise = "0" />
 
     <jointactuatorfrc name = "jointeffort_right_shoulder_pitch" joint = "right_shoulder_pitch_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_right_shoulder_roll" joint = "right_shoulder_roll_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_right_shoulder_yaw" joint = "right_shoulder_yaw_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_right_elbow_pitch" joint = "right_elbow_pitch_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_right_elbow_yaw" joint = "right_elbow_yaw_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_right_wrist_pitch" joint = "right_wrist_pitch_joint" noise = "0" />
-    <jointactuatorfrc name = "jointeffort_right_wrist_roll" joint = "right_wrist_roll_joint" noise = "0" />
 
     <jointactuatorfrc name = "jointeffort_left_hip_pitch" joint = "left_hip_pitch_joint" noise = "0" />
     <jointactuatorfrc name = "jointeffort_left_hip_roll" joint = "left_hip_roll_joint" noise = "0" />

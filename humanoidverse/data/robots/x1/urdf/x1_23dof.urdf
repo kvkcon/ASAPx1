@@ -290,7 +290,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="left_elbow_yaw_joint" type="revolute">
+  <joint name="left_elbow_yaw_joint" type="fixed">
     <parent link="link_left_elbow_pitch" />
     <child link="link_left_elbow_yaw" />
     <origin xyz="0.0 0.117 0.031" rpy="-1.570797326828286 -1.5707934983990568 3.141592653589793" />
@@ -320,7 +320,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="left_wrist_pitch_joint" type="revolute">
+  <joint name="left_wrist_pitch_joint" type="fixed">
     <parent link="link_left_elbow_yaw" />
     <child link="link_left_wrist_pitch" />
     <origin xyz="0.006 9.9998e-05 -0.1394" rpy="1.5707997741256383 0.0 0.0" />
@@ -350,7 +350,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="left_wrist_roll_joint" type="revolute">
+  <joint name="left_wrist_roll_joint" type="fixed">
     <parent link="link_left_wrist_pitch" />
     <child link="link_left_wrist_roll" />
     <origin xyz="0.0 0.0 0.0" rpy="2.5636821218839483 1.5707963267948966 2.5636821218839483" />
@@ -500,7 +500,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="right_elbow_yaw_joint" type="revolute">
+  <joint name="right_elbow_yaw_joint" type="fixed">
     <parent link="link_right_elbow_pitch" />
     <child link="link_right_elbow_yaw" />
     <origin xyz="0.0 -0.117 0.031" rpy="1.570797326828286 -1.5707934983990568 3.141592653589793" />
@@ -530,7 +530,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="right_wrist_pitch_joint" type="revolute">
+  <joint name="right_wrist_pitch_joint" type="fixed">
     <parent link="link_right_elbow_yaw" />
     <child link="link_right_wrist_pitch" />
     <origin xyz="0.006 9.9998e-05 -0.1394" rpy="1.5707997741256383 0.0 0.0" />
@@ -560,7 +560,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="right_wrist_roll_joint" type="revolute">
+  <joint name="right_wrist_roll_joint" type="fixed">
     <parent link="link_right_wrist_pitch" />
     <child link="link_right_wrist_roll" />
     <origin xyz="0.0 0.0 0.0" rpy="2.5636821218839483 1.5707963267948966 2.5636821218839483" />
