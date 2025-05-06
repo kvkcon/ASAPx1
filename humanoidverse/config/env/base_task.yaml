@@ -8,7 +8,7 @@ env:
     num_envs: ${num_envs}
     headless: ${headless}
     simulator: ${simulator}
-    save_rendering_dir: null
+    save_rendering_dir: logs/${experiment_name}/rendering
     ckpt_dir: null
 
 # Globally accessible parameters
