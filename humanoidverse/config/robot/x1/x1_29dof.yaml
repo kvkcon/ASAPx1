@@ -333,7 +333,7 @@ robot:
       #   pos: [0.25, 0.0, 0.0]
       #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
       - joint_name: "head_link"
-        parent_name: "x1-body"
+        parent_name: "link_lumbar_pitch"
         pos: [0.0, 0.0, 0.58]
         rot: [1.0, 0.0, 0.0, 0.0] # w x y z
 
