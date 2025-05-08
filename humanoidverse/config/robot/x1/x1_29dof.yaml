@@ -266,7 +266,7 @@ robot:
 
   motion:
     # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
-    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-Transitions_mocap_mazen_c3d_walksideways_stand_poses_clip.pkl'
+    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes_reorder.pkl'
     asset:
       assetRoot: "humanoidverse/data/robots/x1/"
       # assetFileName: "g1_29dof_anneal_23dof.xml"
@@ -333,8 +333,8 @@ robot:
       #   pos: [0.25, 0.0, 0.0]
       #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
       - joint_name: "head_link"
-        parent_name: "link_lumbar_pitch"
-        pos: [0.0, 0.0, 0.4]
+        parent_name: "x1-body"
+        pos: [0.0, 0.0, 0.58]
         rot: [1.0, 0.0, 0.0, 0.0] # w x y z
 
 
@@ -390,7 +390,7 @@ robot:
       - "link_right_hip_yaw"
     
     joint_matches:
-      - ["link_lumbar_pitch", "Pelvis"]
+      - ["x1-body", "Pelvis"]
       - ["link_left_hip_roll", "L_Hip"]
       - ["link_left_knee_pitch", "L_Knee"]
       - ["link_left_ankle_roll", "L_Ankle"]
@@ -399,10 +399,10 @@ robot:
       - ["link_right_ankle_roll", "R_Ankle"]
       - ["link_left_shoulder_roll", "L_Shoulder"]
       - ["link_left_elbow_pitch", "L_Elbow"]
-      - ["link_left_wrist_roll", "L_Hand"]
+      - ["link_left_wrist_pitch", "L_Hand"]
       - ["link_right_shoulder_roll", "R_Shoulder"]
       - ["link_right_elbow_pitch", "R_Elbow"]
-      - ["link_right_wrist_roll", "R_Hand"]
+      - ["link_right_wrist_pitch", "R_Hand"]
       - ["head_link", "Head"]
       # - ["left_toe_link", "L_Toe"]
       # - ["right_toe_link", "R_Toe"]
@@ -410,8 +410,8 @@ robot:
 
     smpl_pose_modifier:
       - Pelvis: "[np.pi/2, 0, np.pi/2]"
-      # - L_Shoulder: "[0, 0, -np.pi/2]"
-      # - R_Shoulder: "[0, 0, np.pi/2]"
+      - L_Shoulder: "[0, 0, -np.pi/2]"
+      - R_Shoulder: "[0, 0, np.pi/2]"
       # - L_Elbow: "[0, -np.pi/2, 0]"
       # - R_Elbow: "[0, np.pi/2, 0]"
 
