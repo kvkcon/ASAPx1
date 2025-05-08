@@ -102,6 +102,8 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         self.num_motions = self._motion_lib._num_unique_motions
 
     def _init_tracking_config(self):
+        print("-------------------------body_list----------from humanoidverse\envs\motion_tracking\motion_tracking.py--------------------------------")
+        print(f"self.simulator._body_list: {self.simulator._body_list}")
         if "motion_tracking_link" in self.config.robot.motion:
             self.motion_tracking_id = [self.simulator._body_list.index(link) for link in self.config.robot.motion.motion_tracking_link]
         if "lower_body_link" in self.config.robot.motion:
