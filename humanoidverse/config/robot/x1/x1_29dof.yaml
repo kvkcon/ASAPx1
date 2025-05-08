@@ -88,6 +88,12 @@ robot:
   #dof_armature_list:
   #dof_joint_friction_list:
 
+  # body_names: ['base_link', 'link_lumbar_yaw', 'link_lumbar_roll', 'link_lumbar_pitch', 
+  #   'link_left_shoulder_pitch', 'link_left_shoulder_roll', 'link_left_shoulder_yaw', 'link_left_elbow_pitch', 'link_left_elbow_yaw', 'link_left_wrist_pitch', 'link_left_wrist_roll', 
+  #   'link_right_shoulder_pitch', 'link_right_shoulder_roll', 'link_right_shoulder_yaw', 'link_right_elbow_pitch', 'link_right_elbow_yaw', 'link_right_wrist_pitch', 'link_right_wrist_roll', 
+  #   'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
+  #   'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
+  
   body_names: ['base_link', 
     'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
     'link_lumbar_yaw', 'link_lumbar_roll', 'link_lumbar_pitch', 
