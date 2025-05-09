@@ -590,7 +590,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="left_hip_pitch_joint" type="revolute">
+  <joint name="mleft_hip_pitch_joint" type="revolute">
     <parent link="x1-body" />
     <child link="link_left_hip_pitch" />
     <origin xyz="0.00245 0.092277 -0.012143" rpy="3.170218624440796e-07 -0.7853990876280905 1.570798162810677" />
