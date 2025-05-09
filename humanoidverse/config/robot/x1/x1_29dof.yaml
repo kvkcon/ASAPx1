@@ -25,10 +25,10 @@ robot:
   has_upper_body_dof: True
   # Joint configuration
   dof_names: [
-    'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
     'lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint', 
     'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint', 
     'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint', 
+    'mleft_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
     'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint'
   ]
   upper_dof_names: [
@@ -46,7 +46,7 @@ robot:
     'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint'
   ]
   lower_dof_names: [
-    'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint',
+    'mleft_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint',
     'left_ankle_pitch_joint', 'left_ankle_roll_joint',
     'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint',
     'right_ankle_pitch_joint', 'right_ankle_roll_joint'
@@ -56,31 +56,31 @@ robot:
 
   # Joint limits
   dof_pos_lower_limit_list: [
-    -3.14, -2.3, -3.14, 0.0, -1.0, -1.0,            # Left leg
     -3.14, -0.5, -0.3,                              # Lumbar
     -3.14, -3.14, -3.14, 0.0, -3.14, -3.14, -3.14,  # Left arm
     -3.14, -3.14, -3.14, 0.0, -3.14, -3.14, -3.14,  # Right arm
+    -3.14, -2.3, -3.14, 0.0, -1.0, -1.0,            # Left leg
     -6.28, -0.8, -3.14, 0.0, -1.0, -1.0             # Right leg
   ]
   dof_pos_upper_limit_list: [
-    6.28, 0.8, 3.14, 1.8, 1.0, 1.0,                 # Left leg
     3.14, 0.5, 1.57,                                # Lumbar
     3.14, 0.0, 3.14, 1.7, 3.14, 3.14, 3.14,         # Left arm
     3.14, 0.0, 3.14, 1.7, 3.14, 3.14, 3.14,         # Right arm
+    6.28, 0.8, 3.14, 1.8, 1.0, 1.0,                 # Left leg
     3.14, 2.3, 3.14, 1.8, 1.0, 1.0                  # Right leg
   ]
   dof_vel_limit_list: [
-    10.0, 10.0, 10.0, 10.0, 10.0, 10.0,             # Left leg
     10.0, 10.0, 10.0,                               # Lumbar
     10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,       # Left arm
     10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,       # Right arm
+    10.0, 10.0, 10.0, 10.0, 10.0, 10.0,             # Left leg
     10.0, 10.0, 10.0, 10.0, 10.0, 10.0              # Right leg
   ]
   dof_effort_limit_list: [
-    150.0, 50.0, 50.0, 150.0, 18.0, 18.0,           # Left leg
     150.0, 150.0, 150.0,                            # Lumbar
     150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0,  # Left arm
     150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0,  # Right arm
+    150.0, 50.0, 50.0, 150.0, 18.0, 18.0,           # Left leg
     150.0, 50.0, 50.0, 150.0, 18.0, 18.0            # Right leg
   ]
 
@@ -95,10 +95,10 @@ robot:
   #   'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
   
   body_names: ['base_link', 
-    'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
     'link_lumbar_yaw', 'link_lumbar_roll', 'link_lumbar_pitch', 
     'link_left_shoulder_pitch', 'link_left_shoulder_roll', 'link_left_shoulder_yaw', 'link_left_elbow_pitch', 'link_left_elbow_yaw', 'link_left_wrist_pitch', 'link_left_wrist_roll', 
     'link_right_shoulder_pitch', 'link_right_shoulder_roll', 'link_right_shoulder_yaw', 'link_right_elbow_pitch', 'link_right_elbow_yaw', 'link_right_wrist_pitch', 'link_right_wrist_roll', 
+    'link_left_hip_pitch', 'link_left_hip_roll', 'link_left_hip_yaw', 'link_left_knee_pitch', 'link_left_ankle_pitch', 'link_left_ankle_roll', 
     'link_right_hip_pitch', 'link_right_hip_roll', 'link_right_hip_yaw', 'link_right_knee_pitch', 'link_right_ankle_pitch', 'link_right_ankle_roll']
 
   terminate_after_contacts_on : ["base_link", "shoulder", "hip"]
@@ -128,7 +128,7 @@ robot:
       right_elbow_yaw_joint: 0.0
       right_wrist_pitch_joint: 0.0
       right_wrist_roll_joint: 0.0
-      left_hip_pitch_joint: 0.0
+      mleft_hip_pitch_joint: 0.0
       left_hip_roll_joint: 0.0
       left_hip_yaw_joint: 0.0
       left_knee_pitch_joint: 0.0
@@ -197,7 +197,7 @@ robot:
   # - right_elbow_yaw_joint: 30.0      # 右肘偏航，同左肘
   # - right_wrist_pitch_joint: 20.0    # 右腕俯仰，同左腕
   # - right_wrist_roll_joint: 20.0     # 右腕横滚，同左腕
-  # - left_hip_pitch_joint: 150.0      # 左髋俯仰，较高刚度，支撑动态步伐
+  # - mleft_hip_pitch_joint: 150.0      # 左髋俯仰，较高刚度，支撑动态步伐
   # - left_hip_roll_joint: 120.0       # 左髋横滚，适中刚度，灵活摆动
   # - left_hip_yaw_joint: 120.0        # 左髋偏航，适中刚度，步伐协调
   # - left_knee_pitch_joint: 200.0     # 左膝俯仰，高刚度，支撑体重
@@ -266,7 +266,7 @@ robot:
 
   motion:
     # motion_file : 'humanoidverse/data/motions/g1_29dof_anneal_23dof/v1/amass_all.pkl'
-    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes_reorder.pkl'
+    motion_file : 'humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes.pkl'
     asset:
       assetRoot: "humanoidverse/data/robots/x1/"
       # assetFileName: "g1_29dof_anneal_23dof.xml"
@@ -315,7 +315,7 @@ robot:
     dof_names: ['lumbar_yaw_joint', 'lumbar_roll_joint', 'lumbar_pitch_joint', 
                 'left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_elbow_yaw_joint', 'left_wrist_pitch_joint', 'left_wrist_roll_joint', 
                 'right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_elbow_yaw_joint', 'right_wrist_pitch_joint', 'right_wrist_roll_joint', 
-                'left_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
+                'mleft_hip_pitch_joint', 'left_hip_roll_joint', 'left_hip_yaw_joint', 'left_knee_pitch_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 
                 'right_hip_pitch_joint', 'right_hip_roll_joint', 'right_hip_yaw_joint', 'right_knee_pitch_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint']
 
     right_foot_name: 'r_foot_roll'
@@ -333,7 +333,7 @@ robot:
       #   pos: [0.25, 0.0, 0.0]
       #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
       - joint_name: "head_link"
-        parent_name: "link_lumbar_pitch"
+        parent_name: "base_link"
         pos: [0.0, 0.0, 0.58]
         rot: [1.0, 0.0, 0.0, 0.0] # w x y z
 
@@ -421,7 +421,7 @@ robot:
       - [0.929, 0.867, 0.437] # pelvis
       - [0.929, 0.867, 0.437] # left_hip_yaw_joint
       - [0.929, 0.867, 0.437] # left_hip_roll_joint
-      - [0.929, 0.867, 0.437] # left_hip_pitch_joint
+      - [0.929, 0.867, 0.437] # mleft_hip_pitch_joint
       - [0.929, 0.867, 0.437] # left_knee_joint
       - [0.929, 0.867, 0.437] # left_ankle_pitch_joint
       - [0.929, 0.867, 0.437] # left_ankle_roll_joint
