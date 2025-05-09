@@ -333,8 +333,8 @@ robot:
       #   pos: [0.25, 0.0, 0.0]
       #   rot: [1.0, 0.0, 0.0, 0.0] # w x y z
       - joint_name: "head_link"
-        parent_name: "link_lumbar_pitch"
-        pos: [0.0, 0.0, 0.58]
+        parent_name: "link_lumbar_yaw"
+        pos: [0.0, 0.0, 0.485]
         rot: [1.0, 0.0, 0.0, 0.0] # w x y z
 
 
@@ -380,7 +380,7 @@ robot:
 
 
     pelvis_link: "x1-body"
-    base_link: "link_lumbar_pitch"
+    base_link: "link_lumbar_yaw"
     hips_link:
       - "link_left_hip_pitch"
       - "link_left_hip_roll"
@@ -399,10 +399,10 @@ robot:
       - ["link_right_ankle_roll", "R_Ankle"]
       - ["link_left_shoulder_roll", "L_Shoulder"]
       - ["link_left_elbow_pitch", "L_Elbow"]
-      - ["link_left_wrist_pitch", "L_Hand"]
+      - ["link_left_wrist_roll", "L_Hand"]
       - ["link_right_shoulder_roll", "R_Shoulder"]
       - ["link_right_elbow_pitch", "R_Elbow"]
-      - ["link_right_wrist_pitch", "R_Hand"]
+      - ["link_right_wrist_roll", "R_Hand"]
       - ["head_link", "Head"]
       # - ["left_toe_link", "L_Toe"]
       # - ["right_toe_link", "R_Toe"]
