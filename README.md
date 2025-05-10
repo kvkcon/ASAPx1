@@ -37,7 +37,7 @@ See `README_origin.md`
 
 Train a phase-based motion tracking policy to imitate dance motion from AMASS dataset
 
-```bash
+<!-- ```bash
 HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
 +simulator=isaacgym \
 +exp=motion_tracking \
@@ -58,9 +58,32 @@ env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
 env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
 env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
 robot.asset.self_collisions=0
-```
+``` -->
 
 ```bash
+# A100 exp1 older reward_motion_tracking_dm_2real.yaml(only pose reward)
+HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
++simulator=isaacgym \
++exp=motion_tracking \
++domain_rand=NO_domain_rand \
++rewards=motion_tracking/reward_motion_tracking_dm_2real \
++robot=x1/x1_29dof \
++terrain=terrain_locomotion_plane \
++obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
+num_envs=4096 \
+project_name=MotionTracking \
+experiment_name=MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink \
+robot.motion.motion_file="humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes.pkl" \
+rewards.reward_penalty_curriculum=True \
+rewards.reward_penalty_degree=0.00001 \
+env.config.resample_motion_when_training=False \
+env.config.termination.terminate_when_motion_far=True \
+env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
+env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
+env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
+robot.asset.self_collisions=0
+
+# A100 exp2 correctHeadlink & full reward(newest)
 HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
 +simulator=isaacgym \
 +exp=motion_tracking \
@@ -82,39 +105,18 @@ env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
 env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
 robot.asset.self_collisions=0
 
-
+# 3090 exp1
 HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
 +simulator=isaacgym \
 +exp=motion_tracking \
 +domain_rand=NO_domain_rand \
-+rewards=motion_tracking/reward_motion_tracking_dm_2real \
++rewards=motion_tracking/reward_motion_tracking_dm_2real_poseReward_reduce \
 +robot=x1/x1_29dof \
 +terrain=terrain_locomotion_plane \
 +obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
 num_envs=4096 \
 project_name=MotionTracking \
-experiment_name=MotionTracking_Boxlift_29dof_alphabet_changed_urdf_poseReward_reduce \
-robot.motion.motion_file="humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes.pkl" \
-rewards.reward_penalty_curriculum=True \
-rewards.reward_penalty_degree=0.00001 \
-env.config.resample_motion_when_training=False \
-env.config.termination.terminate_when_motion_far=True \
-env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
-env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
-env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
-robot.asset.self_collisions=0
-
-HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
-+simulator=isaacgym \
-+exp=motion_tracking \
-+domain_rand=NO_domain_rand \
-+rewards=motion_tracking/reward_motion_tracking_dm_2real \
-+robot=x1/x1_29dof \
-+terrain=terrain_locomotion_plane \
-+obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
-num_envs=4096 \
-project_name=MotionTracking \
-experiment_name=MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink \
+experiment_name=MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink_poseReward_reduce \
 robot.motion.motion_file="humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes.pkl" \
 rewards.reward_penalty_curriculum=True \
 rewards.reward_penalty_degree=0.00001 \
