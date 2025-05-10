@@ -107,7 +107,7 @@ def main():
             'dof_pos': qtjoints,
             'dof_vel': qtvel,
             'actions': actions,
-            'ref_motion_phase': np.array([step / total_steps])  # Simple phase approximation
+            'ref_motion_phase': np.array([step / total_steps])  # Simple phase approximation # but ref_motion_phase in motion_tracking is motion_times / self._ref_motion_length
         }
         
         # Create the current actor observation (without history)
