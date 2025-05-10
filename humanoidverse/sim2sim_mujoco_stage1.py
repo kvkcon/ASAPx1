@@ -98,6 +98,11 @@ def main():
             'qt_vel': qtvel    # q̇t (joint velocities)
         }
         states.append(current_state)
+
+        gravity_vec = np.array([0, 0, -9.81], dtype=np.float64)
+        # # 注意：MuJoCo四元数格式是[x,y,z,w]，而PyTorch格式可能是[w,x,y,z]，请确认格式
+        # # 如果需要转换: qtbase_wxyz = np.array([qtbase[3], qtbase[0], qtbase[1], qtbase[2]])
+        projected_gravity = mujoco_quat_rotate_inverse(qtbase, gravity_vec)
         
         # Prepare observation for policy
         obs_dict = {
@@ -197,6 +202,32 @@ def main():
         pickle.dump(final_data, f)
     
     print("Done!")
+
+# 在mujoco代码中实现quat_rotate_inverse的等效功能
+def mujoco_quat_rotate_inverse(quat, vec):
+    """
+    将向量从世界坐标系旋转到以四元数定义的局部坐标系
+    
+    Args:
+        quat: 四元数 [x, y, z, w] 格式
+        vec: 向量 [x, y, z]
+        
+    Returns:
+        旋转后的向量 [x, y, z]
+    """
+    # 确保使用float32
+    quat = np.array(quat, dtype=np.float32)
+    vec = np.array(vec, dtype=np.float32)
+    
+    # 提取四元数分量
+    q_x, q_y, q_z, q_w = quat
+    
+    # 计算旋转
+    a = vec * (2.0 * q_w**2 - 1.0)
+    b = np.cross(quat[:3], vec) * (q_w * 2.0)
+    c = quat[:3] * (np.dot(quat[:3], vec) * 2.0)
+    
+    return a - b + c
 
 if __name__ == "__main__":
     main()
