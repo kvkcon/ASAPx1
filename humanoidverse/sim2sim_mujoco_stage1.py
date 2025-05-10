@@ -108,7 +108,7 @@ def main():
         obs_dict = {
             'base_lin_vel': vtbase,  # Not used in actor_obs but recorded
             'base_ang_vel': wtbase,
-            'projected_gravity': np.array([0, 0, -9.81]),  # Simple approximation, adjust if needed
+            'projected_gravity': projected_gravity,  # Simple approximation, adjust if needed
             'dof_pos': qtjoints,
             'dof_vel': qtvel,
             'actions': actions,
