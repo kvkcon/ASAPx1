@@ -151,10 +151,14 @@ class IsaacGym(BaseSimulator):
         asset_file = self.robot_config.asset.urdf_file
         self.robot_asset = self._setup_robot_asset_when_env_created(asset_root, asset_file, self.robot_config.asset)
         self.num_dof, self.num_bodies, self.dof_names, self.body_names = self._setup_robot_props_when_env_created()
+        print(colored(f"Number of DOFs: {self.num_dof}", "green"))
         
         # assert if  aligns with config
+        print(colored(f"Number of robot_config.dof_names: {len(self.robot_config.dof_names)}", "green"))
         assert self.num_dof == len(self.robot_config.dof_names), "Number of DOFs must be equal to number of actions"
         assert self.num_bodies == len(self.robot_config.body_names), "Number of bodies must be equal to number of body names"
+        print(colored(f"Number of bodies: {self.num_bodies}", "green"))
+        print(colored(f"body_names: {self.body_names}", "green"))
         assert self.dof_names == self.robot_config.dof_names, "DOF names must match the config"
         assert self.body_names == self.robot_config.body_names, "Body names must match the config"
 
@@ -162,6 +166,8 @@ class IsaacGym(BaseSimulator):
         asset_path = os.path.join(asset_root, asset_file)
         gym_asset_root = os.path.dirname(asset_path)
         gym_asset_file = os.path.basename(asset_path)
+        print(colored(f"Loading asset {gym_asset_file} from {gym_asset_root}", "white"))
+        print(colored(f"Asset path: {asset_path}", "white"))
 
         asset_options = gymapi.AssetOptions()
 

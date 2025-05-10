@@ -5,7 +5,7 @@ import os
 from humanoidverse.envs.legged_base_task.legged_robot_base import LeggedRobotBase
 from isaac_utils.rotations import (
     my_quat_rotate,
-    quat_to_tan_norm, 
+    # quat_to_tan_norm, 
     calc_heading_quat_inv,
     calc_heading_quat,
     quat_mul,
@@ -102,6 +102,8 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         self.num_motions = self._motion_lib._num_unique_motions
 
     def _init_tracking_config(self):
+        print("-------------------------body_list----------from humanoidverse\envs\motion_tracking\motion_tracking.py--------------------------------")
+        print(f"self.simulator._body_list: {self.simulator._body_list}")
         if "motion_tracking_link" in self.config.robot.motion:
             self.motion_tracking_id = [self.simulator._body_list.index(link) for link in self.config.robot.motion.motion_tracking_link]
         if "lower_body_link" in self.config.robot.motion:
@@ -610,7 +612,7 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         return r_feet
     
     def _reward_teleop_body_rotation_extend(self):
-        rotation_diff = quat_to_angle_axis(self.dif_global_body_rot, w_last=True)[0]
+        rotation_diff = quat_to_angle_axis(self.dif_global_body_rot)[0]#, w_last=True)[0]
         diff_body_rot_dist = (rotation_diff**2).mean(dim=-1)
         r_body_rot = torch.exp(-diff_body_rot_dist / self.config.rewards.reward_tracking_sigma.teleop_body_rot)
         return r_body_rot
