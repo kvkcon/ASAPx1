@@ -5,18 +5,18 @@
 
 rewards:
   set_reward: Binwen
-  set_reward_date: 20250501
+  set_reward_date: 20250510
   only_positive_rewards: False
   reward_scales:
       teleop_body_position_extend: 20.0
-      teleop_vr_3point: 0.0
-      teleop_body_position_feet: 0.0
-      teleop_body_rotation_extend: 0.0
-      teleop_body_ang_velocity_extend: 0.0
-      teleop_body_velocity_extend: 0.0
-      teleop_joint_position: 0.0
-      teleop_joint_velocity: 0.0
-      penalty_torques: -0.0
+      teleop_vr_3point: 6.4
+      teleop_body_position_feet: 8.16
+      teleop_body_rotation_extend: 2.0
+      teleop_body_ang_velocity_extend: 2.0
+      teleop_body_velocity_extend: 0.5
+      teleop_joint_position: 0.75
+      teleop_joint_velocity: 0.5
+      penalty_torques: -0.000001
       # penalty_dof_vel: -0.0001
       # penalty_dof_acc: -2.5e-8
       penalty_action_rate: -0.5 # need to be tuned up to -0.5 for real robot
@@ -24,13 +24,13 @@ rewards:
       # penalty_stumble: -10.0
       
       # better for landing
-      penalty_feet_ori: -0.0
-      feet_heading_alignment: -0.0
-      penalty_slippage: -0.0
+      penalty_feet_ori: -2.0
+      feet_heading_alignment: -0.1
+      penalty_slippage: -1.0
 
-      limits_dof_pos: -0.0
-      limits_dof_vel: -0.0
-      limits_torque: -0.0
+      limits_dof_pos: -10.0
+      limits_dof_vel: -5.0
+      limits_torque: -5.0
       termination: -200.0
       # feet_max_height_for_this_air: -100.0
       
@@ -41,16 +41,16 @@ rewards:
   desired_feet_max_height_for_this_air: 0.2
 
   reward_tracking_sigma:
-    teleop_upper_body_pos: 0.0
-    teleop_lower_body_pos: 0.0
-    teleop_vr_3point_pos: 0.0
-    teleop_feet_pos: 0.0
+    teleop_upper_body_pos: 0.03
+    teleop_lower_body_pos: 0.1
+    teleop_vr_3point_pos: 0.03
+    teleop_feet_pos: 0.03
 
-    teleop_body_rot: 0.0
-    teleop_body_vel: 0.0
-    teleop_body_ang_vel: 0.0
-    teleop_joint_pos: 0.0
-    teleop_joint_vel: 0.0
+    teleop_body_rot: 1.0
+    teleop_body_vel: 1.0
+    teleop_body_ang_vel: 1.0
+    teleop_joint_pos: 1.0
+    teleop_joint_vel: 1.0
 
 
 
