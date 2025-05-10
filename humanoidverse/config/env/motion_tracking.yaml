@@ -53,6 +53,7 @@ env:
     use_teleop_control: False
     enforce_randomize_motion_start_eval: False
 
+    use_delta_policy: False
 
 # Globally accessible parameters
 log_task_name: motion_tracking
