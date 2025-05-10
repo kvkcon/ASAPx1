@@ -46,10 +46,6 @@ def main():
         'local_ref_rigid_body_pos': 93, 
         'ref_motion_phase': 1
     }
-    auxiliary_obs_dims = {
-        'history_actor': 376, 
-        'history_critic': 388
-    }
     
     # Actor observation includes these components:
     actor_obs_keys = [
@@ -62,13 +58,11 @@ def main():
     ]
     
     # Calculate the size of a single actor_obs without history
-    single_actor_obs_size = sum(obs_dims[key] for key in actor_obs_keys)
+    single_actor_obs_size = sum(obs_dims[key] for key in actor_obs_keys)  # Should be 94
     
-    # The history window needed for actor_obs
-    # The actor_obs is 470 in total, and single_actor_obs is (3+3+29+29+29+1) = 94
-    # So we have 470 - 94 = 376 elements for history, which matches auxiliary_obs_dims['history_actor']
-    # Since each historical observation is 94 elements, we need 376/94 ~ 4 history time steps
-    history_window = 4
+    # Based on the logs and errors, we need 5 total observations (current + 4 history frames)
+    # to reach the expected 470 dimensions (5 * 94 = 470)
+    history_window = 5
     
     # Initialize history
     actor_obs_history = []
@@ -128,14 +122,14 @@ def main():
         while len(actor_obs_history) < history_window:
             actor_obs_history.append(current_actor_obs)
         
-        # Construct the full actor_obs with history
-        history_flat = np.concatenate(actor_obs_history[:-1])  # All but the current observation
-        full_actor_obs = np.concatenate([current_actor_obs, history_flat])
+        # Construct the full actor_obs with history (all observations, not just history)
+        # It appears the format might be [current_obs, history_frame_1, history_frame_2, ...]
+        full_actor_obs = np.concatenate(actor_obs_history)
         
         # Check the shape before running inference
         if full_actor_obs.shape[0] != 470:
             print(f"Warning: actor_obs shape is {full_actor_obs.shape[0]}, expected 470")
-            print(f"Current obs size: {current_actor_obs.shape[0]}, History size: {history_flat.shape[0]}")
+            print(f"Current obs size: {current_actor_obs.shape[0]}, History size: {full_actor_obs.shape[0] - current_actor_obs.shape[0]}")
             # Try to adjust if there's a mismatch
             if full_actor_obs.shape[0] < 470:
                 # Pad with zeros if too small
