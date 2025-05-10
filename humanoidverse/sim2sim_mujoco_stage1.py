@@ -9,7 +9,7 @@ from pathlib import Path
 def main():
     # Path configurations
     onnx_path = "/home/bbw/ASAPx1/logs/MotionTracking/20250509_232245-MotionTracking_Boxlift_29dof_alphabet_changed_urdf_poseReward_reduce_correctHeadlink-motion_tracking-x1/exported/model_14000.onnx"
-    model_xml_path = "/home/bbw/ASAPx1/humanoidverse/assets/robots/x1_29dof.xml"  # Adjust this path to the robot XML file
+    model_xml_path = "/home/bbw/ASAPx1/humanoidverse/data/robots/x1/x1.xml"
     output_path = "/home/bbw/ASAPx1/inference_results/boxlift_inference.pkl"
     
     # Create output directory if it doesn't exist
