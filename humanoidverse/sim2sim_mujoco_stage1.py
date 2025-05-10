@@ -18,6 +18,8 @@ def main():
     # Load ONNX model
     print(f"Loading ONNX model from {onnx_path}")
     ort_session = ort.InferenceSession(onnx_path)
+    input_name = ort_session.get_inputs()[0].name
+    print(f"Model input name: {input_name}")
     
     # Load MuJoCo model
     print(f"Loading MuJoCo model from {model_xml_path}")
@@ -31,16 +33,54 @@ def main():
     steps_per_control = int(control_timestep / physics_timestep)
     
     total_steps = int(sim_duration / control_timestep)
-    history_window = 3  # Assuming the policy uses some history (adjust as needed)
+    
+    # Observation dimensions based on logs
+    obs_dims = {
+        'base_lin_vel': 3, 
+        'base_ang_vel': 3, 
+        'projected_gravity': 3, 
+        'dof_pos': 29, 
+        'dof_vel': 29, 
+        'actions': 29, 
+        'dif_local_rigid_body_pos': 93, 
+        'local_ref_rigid_body_pos': 93, 
+        'ref_motion_phase': 1
+    }
+    auxiliary_obs_dims = {
+        'history_actor': 376, 
+        'history_critic': 388
+    }
+    
+    # Actor observation includes these components:
+    actor_obs_keys = [
+        'base_ang_vel',      # 3
+        'projected_gravity', # 3
+        'dof_pos',           # 29
+        'dof_vel',           # 29
+        'actions',           # 29
+        'ref_motion_phase'   # 1
+    ]
+    
+    # Calculate the size of a single actor_obs without history
+    single_actor_obs_size = sum(obs_dims[key] for key in actor_obs_keys)
+    
+    # The history window needed for actor_obs
+    # The actor_obs is 470 in total, and single_actor_obs is (3+3+29+29+29+1) = 94
+    # So we have 470 - 94 = 376 elements for history, which matches auxiliary_obs_dims['history_actor']
+    # Since each historical observation is 94 elements, we need 376/94 ~ 4 history time steps
+    history_window = 4
+    
+    # Initialize history
+    actor_obs_history = []
     
     # Storage for recorded states
     states = []
     
-    # Prepare observation history (if needed by the policy)
-    obs_history = []
-    
     # Reset simulation
     mujoco.mj_resetData(model, data)
+    
+    # Initial action
+    actions = np.zeros(obs_dims['actions'])
     
     print(f"Starting simulation for {sim_duration} seconds ({total_steps} steps)")
     
@@ -65,56 +105,55 @@ def main():
         }
         states.append(current_state)
         
-        # Prepare observation for policy (format according to your policy's requirements)
-        # This is a simplified example - you'll need to adapt this to your specific observation format
-        base_ang_vel = wtbase
-        projected_gravity = np.array([0, 0, -9.81])  # Simple approximation, adjust as needed
-        dof_pos = qtjoints
-        dof_vel = qtvel
-        actions = np.zeros_like(qtjoints)  # Initial action or previous action
-        ref_motion_phase = np.array([step / total_steps])  # Simple phase approximation
-        
-        # Create observation dictionary (adjust according to your model's input format)
+        # Prepare observation for policy
         obs_dict = {
-            'base_ang_vel': base_ang_vel,
-            'projected_gravity': projected_gravity,
-            'dof_pos': dof_pos,
-            'dof_vel': dof_vel,
+            'base_lin_vel': vtbase,  # Not used in actor_obs but recorded
+            'base_ang_vel': wtbase,
+            'projected_gravity': np.array([0, 0, -9.81]),  # Simple approximation, adjust if needed
+            'dof_pos': qtjoints,
+            'dof_vel': qtvel,
             'actions': actions,
-            'ref_motion_phase': ref_motion_phase,
+            'ref_motion_phase': np.array([step / total_steps])  # Simple phase approximation
         }
         
-        # Add history if needed
-        if len(obs_history) >= history_window:
-            # Create history vector (format according to your policy requirements)
-            # This is just a placeholder - adjust based on your actual history format
-            history_actor = np.concatenate([h for h in obs_history[-history_window:]])
-            obs_dict['history_actor'] = history_actor
+        # Create the current actor observation (without history)
+        current_actor_obs = np.concatenate([obs_dict[key] for key in actor_obs_keys])
         
-        # Convert observation dict to network input format
-        # This is a simplified example - adjust according to your policy's input requirements
-        network_input = np.concatenate([
-            obs_dict['base_ang_vel'],
-            obs_dict['projected_gravity'],
-            obs_dict['dof_pos'],
-            obs_dict['dof_vel'],
-            obs_dict['actions'],
-            obs_dict['ref_motion_phase'],
-        ])
+        # Add to history
+        actor_obs_history.append(current_actor_obs)
+        if len(actor_obs_history) > history_window:
+            actor_obs_history.pop(0)
         
-        if 'history_actor' in obs_dict:
-            network_input = np.concatenate([network_input, obs_dict['history_actor']])
+        # If we don't have enough history yet, duplicate the current observation
+        while len(actor_obs_history) < history_window:
+            actor_obs_history.append(current_actor_obs)
         
-        # Get action from policy
-        input_name = ort_session.get_inputs()[0].name
-        action = ort_session.run(None, {input_name: network_input.reshape(1, -1).astype(np.float32)})[0][0]
+        # Construct the full actor_obs with history
+        history_flat = np.concatenate(actor_obs_history[:-1])  # All but the current observation
+        full_actor_obs = np.concatenate([current_actor_obs, history_flat])
         
-        # Update observation history
-        obs_history.append(np.concatenate([
-            base_ang_vel, projected_gravity, dof_pos, dof_vel, action, ref_motion_phase
-        ]))
-        if len(obs_history) > history_window:
-            obs_history.pop(0)
+        # Check the shape before running inference
+        if full_actor_obs.shape[0] != 470:
+            print(f"Warning: actor_obs shape is {full_actor_obs.shape[0]}, expected 470")
+            print(f"Current obs size: {current_actor_obs.shape[0]}, History size: {history_flat.shape[0]}")
+            # Try to adjust if there's a mismatch
+            if full_actor_obs.shape[0] < 470:
+                # Pad with zeros if too small
+                pad_size = 470 - full_actor_obs.shape[0]
+                full_actor_obs = np.pad(full_actor_obs, (0, pad_size), 'constant')
+            elif full_actor_obs.shape[0] > 470:
+                # Truncate if too large
+                full_actor_obs = full_actor_obs[:470]
+        
+        # Run inference
+        try:
+            action = ort_session.run(None, {input_name: full_actor_obs.reshape(1, -1).astype(np.float32)})[0][0]
+            # Store the action for the next step's observation
+            actions = action.copy()
+        except Exception as e:
+            print(f"Error during inference: {e}")
+            print(f"Input shape: {full_actor_obs.shape}")
+            break
         
         # Apply action to control
         data.ctrl[:] = action
@@ -135,15 +174,16 @@ def main():
     # Extract data arrays
     root_trans = np.array([s['ptbase'] for s in states])
     
-    # Convert joint positions to pose_aa format (adjust as needed)
-    # This is a placeholder - you may need to convert your joint angles to axis-angle format
-    pose_aa = np.zeros((num_frames, 31, 3))  # Placeholder
+    # For pose_aa, we'd need to convert joint positions to axis-angle format
+    # This is a placeholder, and you may need to implement the proper conversion
+    pose_aa = np.zeros((num_frames, 31, 3))
     
     dof = np.array([s['qt'] for s in states])
     root_rot = np.array([s['qtbase'] for s in states])
     
-    # Convert to SMPL joints (placeholder - adjust as needed)
-    smpl_joints = np.zeros((num_frames, 24, 3))  # Placeholder
+    # For SMPL joints, you'd need the proper forward kinematics
+    # This is a placeholder
+    smpl_joints = np.zeros((num_frames, 24, 3))
     
     # Create the final dictionary structure
     final_data = {
