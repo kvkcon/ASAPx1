@@ -167,7 +167,7 @@ env.config.termination.terminate_when_motion_far=True \
 env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
 env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
 env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
-env.config.use_delta_policy = True \
+env.config.use_delta_policy=True \
 robot.asset.self_collisions=0
 ```
 
