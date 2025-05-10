@@ -182,11 +182,11 @@ def main():
     # Create the final dictionary structure
     final_data = {
         motion_name: {
-            'root_trans_offset': root_trans,
-            'pose_aa': pose_aa,
-            'dof': dof,
-            'root_rot': root_rot,
-            'smpl_joints': smpl_joints,
+            'root_trans_offset': root_trans.astype(np.float64),
+            'pose_aa': pose_aa.astype(np.float32),
+            'dof': dof.astype(np.float32),
+            'root_rot': root_rot.astype(np.float64),
+            'smpl_joints': smpl_joints.astype(np.float32),
             'fps': 30
         }
     }
