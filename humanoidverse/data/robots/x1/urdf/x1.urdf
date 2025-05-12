@@ -70,7 +70,7 @@
     <child link="link_lumbar_yaw" />
     <origin xyz="0.00245 0.0 0.115534" rpy="0.0 0.0 -4.549120001569029e-05" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-1" upper="1" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_lumbar_roll">
@@ -175,7 +175,7 @@
     <child link="link_left_shoulder_pitch" />
     <origin xyz="0.0 0.256 -0.1458" rpy="0.0 0.0 3.141592653589793" />
     <axis xyz="0 0 -1" />
-    <limit lower="-3.14" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-3.0892" upper="2.6704" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_shoulder_roll">
@@ -205,7 +205,7 @@
     <child link="link_left_shoulder_roll" />
     <origin xyz="-0.0313 0.0 -0.0592" rpy="3.141592653589793 -1.5695351209389776 3.141592653589793" />
     <axis xyz="0 0 -1" />
-    <limit lower="-3.14" upper="0.0" effort="150.0" velocity="10" />
+    <limit lower="-2.2515" upper="0" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_shoulder_yaw">
@@ -235,7 +235,7 @@
     <child link="link_left_shoulder_yaw" />
     <origin xyz="0.0 0.1252 -0.0313" rpy="1.5707997741256383 1.5707963267948966 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-2.618" upper="2.618" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_elbow_pitch">
@@ -385,7 +385,7 @@
     <child link="link_right_shoulder_pitch" />
     <origin xyz="0.0 0.256 0.1458" rpy="-3.1415853071697932 -0.0 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-3.0892" upper="2.6704" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_shoulder_roll">
@@ -415,7 +415,7 @@
     <child link="link_right_shoulder_roll" />
     <origin xyz="0.0313 0.0 -0.0592" rpy="5.90047134464237e-06 -1.5695351316370647 -3.1415922353138543" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="0.0" effort="150.0" velocity="10" />
+    <limit lower="-2.2515" upper="0.0" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_shoulder_yaw">
@@ -445,7 +445,7 @@
     <child link="link_right_shoulder_yaw" />
     <origin xyz="0.0 -0.1252 -0.0313" rpy="1.5707997741256383 0.0 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-2.618" upper="2.618" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_elbow_pitch">
@@ -595,7 +595,7 @@
     <child link="link_left_hip_pitch" />
     <origin xyz="0.00245 0.092277 -0.012143" rpy="3.170218624440796e-07 -0.7853990876280905 1.570798162810677" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="6.28" effort="150.0" velocity="10" />
+    <limit lower="-2.8798" upper="2.5307" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_hip_roll">
@@ -625,7 +625,7 @@
     <child link="link_left_hip_roll" />
     <origin xyz="0.0 -0.0405 -0.0589" rpy="1.5707944672847372 0.7853972398675609 0.0" />
     <axis xyz="0 0 -1" />
-    <limit lower="-2.3" upper="0.8" effort="50.0" velocity="10" />
+    <limit lower="-2.9671" upper="0.5236" effort="50.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_hip_yaw">
@@ -655,7 +655,7 @@
     <child link="link_left_hip_yaw" />
     <origin xyz="0.0 -0.0838049 -0.0406" rpy="1.5707969456925137 0.0 0.0" />
     <axis xyz="0 0 -1" />
-    <limit lower="-3.14" upper="3.14" effort="50.0" velocity="10" />
+    <limit lower="-2.7576" upper="2.7576" effort="50.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_knee_pitch">
@@ -685,7 +685,7 @@
     <child link="link_left_knee_pitch" />
     <origin xyz="-0.0337 0.0 0.1422" rpy="-1.5707963267948966 0.0 -1.5707963267948966" />
     <axis xyz="0 0 1" />
-    <limit lower="0.0" upper="1.8" effort="150.0" velocity="10" />
+    <limit lower="-0.087267" upper="2.8798" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_ankle_pitch">
@@ -715,7 +715,7 @@
     <child link="link_left_ankle_pitch" />
     <origin xyz="0.0 -0.30494 0.0336" rpy="3.141592653589793 -0.0 3.141592653589793" />
     <axis xyz="0 0 -1" />
-    <limit lower="-1.0" upper="1.0" effort="18.0" velocity="10" />
+    <limit lower="-0.1744" upper="0.1744" effort="18.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_ankle_roll">
@@ -865,7 +865,7 @@
     <child link="link_left_ankle_roll" />
     <origin xyz="0.0 0.0 0.0" rpy="3.141592653589793 1.5707963267948966 3.141592653589793" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.0" upper="1.0" effort="18.0" velocity="10" />
+    <limit lower="-0.1744" upper="0.1744" effort="18.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_hip_pitch">
@@ -895,7 +895,7 @@
     <child link="link_right_hip_pitch" />
     <origin xyz="0.00245 -0.092277 -0.012143" rpy="-3.170218624440796e-07 -0.7853990876280905 -1.570798162810677" />
     <axis xyz="0 0 1" />
-    <limit lower="-6.28" upper="3.14" effort="150.0" velocity="10" />
+    <limit lower="-2.5307" upper="2.8798" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_hip_roll">
@@ -925,7 +925,7 @@
     <child link="link_right_hip_roll" />
     <origin xyz="0.0 0.0405 -0.0589" rpy="1.5707944672847372 0.7853972398675609 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-0.8" upper="2.3" effort="50.0" velocity="10" />
+    <limit lower="-0.5236" upper="2.9671" effort="50.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_hip_yaw">
@@ -955,7 +955,7 @@
     <child link="link_right_hip_yaw" />
     <origin xyz="0.0 -0.0777549 0.0406" rpy="-1.570795680858224 0.0 0.00861026510120185" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.14" upper="3.14" effort="50.0" velocity="10" />
+    <limit lower="-2.7576" upper="2.7576" effort="50.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_knee_pitch">
@@ -985,7 +985,7 @@
     <child link="link_right_knee_pitch" />
     <origin xyz="-0.0347752 0.0 -0.147956" rpy="1.5794068841809208 0.0 1.5707968599006124" />
     <axis xyz="0 0 -1" />
-    <limit lower="0.0" upper="1.8" effort="150.0" velocity="10" />
+    <limit lower="-0.087267" upper="2.8798" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_ankle_pitch">
@@ -1015,7 +1015,7 @@
     <child link="link_right_ankle_pitch" />
     <origin xyz="0.0 -0.30494 0.0336" rpy="3.141592653589793 0.0 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.0" upper="1.0" effort="18.0" velocity="10" />
+    <limit lower="-0.1744" upper="0.1744" effort="18.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_ankle_roll">
@@ -1165,7 +1165,7 @@
     <child link="link_right_ankle_roll" />
     <origin xyz="0.0 0.0 0.0" rpy="3.141592653589793 1.5707963267948966 3.141592653589793" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.0" upper="1.0" effort="18.0" velocity="10" />
+    <limit lower="-0.1744" upper="0.1744" effort="18.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
 </robot>
