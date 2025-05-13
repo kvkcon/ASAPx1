@@ -4,6 +4,9 @@ algo:
   _target_: humanoidverse.agents.delta_a.train_delta_a.PPODeltaA
   _recursive_: False
   config:
+    # policy_checkpoint: null
+    policy_checkpoint: "logs/MotionTracking/20250511_083639-MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink_limit-motion_tracking-x1/model_38000.pt"
+
     num_learning_epochs: 5
     num_mini_batches: 4
     clip_param: 0.2
