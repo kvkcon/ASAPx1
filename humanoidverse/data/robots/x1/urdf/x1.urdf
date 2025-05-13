@@ -175,7 +175,7 @@
     <child link="link_left_shoulder_pitch" />
     <origin xyz="0.0 0.256 -0.1458" rpy="0.0 0.0 3.141592653589793" />
     <axis xyz="0 0 -1" />
-    <limit lower="-3.0892" upper="2.6704" effort="150.0" velocity="10" />
+    <limit lower="-3.0892" upper="1.0467" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_left_shoulder_roll">
@@ -385,7 +385,7 @@
     <child link="link_right_shoulder_pitch" />
     <origin xyz="0.0 0.256 0.1458" rpy="-3.1415853071697932 -0.0 0.0" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.0892" upper="2.6704" effort="150.0" velocity="10" />
+    <limit lower="-3.0892" upper="1.0467" effort="150.0" velocity="10" />
     <dynamics damping="1.0" />
   </joint>
   <link name="link_right_shoulder_roll">
