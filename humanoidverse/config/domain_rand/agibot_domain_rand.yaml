@@ -46,7 +46,7 @@ domain_rand:
   link_mass_range : [0.9, 1.1]
   added_link_mass_range: [0.9, 1.1]
   randomize_link_body_names : [
-      'x1-body', 'link_left_hip_yaw', 'link_left_hip_roll', 'link_left_hip_pitch', 'link_left_knee_pitch',
+      'base_link', 'link_left_hip_yaw', 'link_left_hip_roll', 'link_left_hip_pitch', 'link_left_knee_pitch',
       'link_right_hip_yaw', 'link_right_hip_roll', 'link_right_hip_pitch', 'link_right_knee_pitch',
   ]
 
