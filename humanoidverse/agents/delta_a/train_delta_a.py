@@ -123,7 +123,7 @@ class PPODeltaA(PPO):
                 actor_state["actions"] = actions
                 
                 ################ inference the policy ################
-                policy_output = self.loaded_policy.eval_policy(obs_dict['closed_loop_actor_obs']).detach()
+                policy_output = self.loaded_policy.eval_policy(obs_dict['actor_obs']).detach()
                 actor_state["actions_closed_loop"] = policy_output
 
                 
