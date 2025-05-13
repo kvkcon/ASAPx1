@@ -4,16 +4,16 @@
 obs:
   obs_dict:
     actor_obs: [
-      base_ang_vel,
-      projected_gravity,
-      dof_pos,
-      dof_vel,
-      actions,
-      ref_motion_phase,
+      base_ang_vel, #3
+      projected_gravity, #3
+      dof_pos, #29
+      dof_vel, #29
+      actions,  #29
+      ref_motion_phase, #1
       # dif_local_rigid_body_pos,
       # local_ref_rigid_body_pos,
       # history,
-      history_actor
+      history_actor # 94*4
     ]
 
     critic_obs: [
