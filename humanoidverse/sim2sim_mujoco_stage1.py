@@ -8,9 +8,9 @@ from pathlib import Path
 
 def main():
     # Path configurations
-    onnx_path = "/home/bbw/ASAPx1/logs/MotionTracking/20250509_232245-MotionTracking_Boxlift_29dof_alphabet_changed_urdf_poseReward_reduce_correctHeadlink-motion_tracking-x1/exported/model_14000.onnx"
+    onnx_path = "/home/bbw/dev/ASAPx1/logs/MotionTracking/20250511_083639-MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink_limit-motion_tracking-x1/exported/model_36000.onnx"
     model_xml_path = "/home/bbw/ASAPx1/humanoidverse/data/robots/x1/x1.xml"
-    output_path = "/home/bbw/ASAPx1/inference_results/boxlift_inference_projected_gravity.pkl"
+    output_path = "/home/bbw/ASAPx1/inference_results/boxlift_inference_projected_gravity_36000.pkl"
     
     # Create output directory if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
