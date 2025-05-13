@@ -349,7 +349,10 @@ class IsaacGym(BaseSimulator):
             if env_id<3:
                 logger.debug("randomizing base com")
             try:
-                torso_index = self._body_list.index("torso_link")
+                if "torso_link" in self._body_list:
+                    torso_index = self._body_list.index("torso_link")
+                else:
+                    torso_index = self._body_list.index("link_lumbar_pitch")
             except:
                 torso_index = self._body_list.index("pelvis") # for fixed upper URDF we only have pelvis link
             assert torso_index != -1
@@ -386,7 +389,10 @@ class IsaacGym(BaseSimulator):
             try:
                 base_index = self._body_list.index("pelvis") # for fixed upper URDF we only have pelvis link
             except:
-                base_index = self._body_list.index("torso_link")
+                if "torso_link" in self._body_list:
+                    base_index = self._body_list.index("torso_link")
+                else:
+                    base_index = self._body_list.index("link_lumbar_pitch")
             assert base_index != -1
             # raise Exception("index 0 is for world, 13 is for torso!")
             # raise NotImplementedError
