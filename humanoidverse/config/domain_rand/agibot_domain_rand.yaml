@@ -1,5 +1,9 @@
 # @package _global_
 
+
+defaults:
+  - domain_rand_base
+
 domain_rand:
   # # push robots
   # push_robots: True
