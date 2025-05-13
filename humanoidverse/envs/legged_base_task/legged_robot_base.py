@@ -27,6 +27,7 @@ class LeggedRobotBase(BaseTask):
     def __init__(self, config, device):
         self.init_done = False
         super().__init__(config, device)
+        self.use_delta_policy = config.get('use_delta_policy',False)
         self._domain_rand_config()
         self._prepare_reward_function()
         self.history_handler = HistoryHandler(self.num_envs, config.obs.obs_auxiliary, config.obs.obs_dims, device)

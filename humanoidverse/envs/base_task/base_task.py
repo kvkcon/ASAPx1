@@ -95,8 +95,10 @@ class BaseTask():
         self.simulator.set_dof_state_tensor(torch.arange(self.num_envs, device=self.device), self.simulator.dof_state)
         # self._refresh_env_idx_tensors(torch.arange(self.num_envs, device=self.device))
         actions = torch.zeros(self.num_envs, self.dim_actions, device=self.device, requires_grad=False)
+        actions_closed_loop = torch.zeros(self.num_envs, self.dim_actions, device=self.device, requires_grad=False)
         actor_state = {}
         actor_state["actions"] = actions
+        actor_state["actions_closed_loop"] = actions_closed_loop
         obs_dict, _, _, _ = self.step(actor_state)
         return obs_dict
     
