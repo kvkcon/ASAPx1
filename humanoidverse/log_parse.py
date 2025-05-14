@@ -60,9 +60,9 @@ if missing_steps:
 with open("training_log_steps_0_10_and_51_60.txt", "w") as f:
     for step in all_target_steps:
         if step in available_steps:
-            f.write(f"╭───────────────────────────────────────────────────────── Training Log ──────────────────────────────────────────────────────────╮\n")
-            f.write(f"│                     Learning iteration {step}/1000000                                                                      │\n")
-            f.write(f"│                                                                                                                                 │\n")
+            f.write(f"╭─────────────────────────────── Training Log ─────────────────────────────────╮\n")
+            f.write(f"│                         Learning iteration {step}/1000000                         │\n")
+            f.write(f"│                                                                              │\n")
             
             # 计算这个步骤在filtered_steps中的索引
             idx = filtered_steps.index(step)
@@ -98,7 +98,7 @@ with open("training_log_steps_0_10_and_51_60.txt", "w") as f:
                     f.write(formatted_line)
             
             # 添加分隔线和总结信息（如果有的话）
-            f.write(f"│ --------------------------------------------------------------------------------                                                │\n")
+            f.write(f"│ -----------------------------------------------------------                  │\n")
             
             # 寻找总时间步数等信息（如果有的话）
             total_timesteps_tag = next((t for t in tags if "timesteps" in t.lower()), None)
@@ -109,6 +109,6 @@ with open("training_log_steps_0_10_and_51_60.txt", "w") as f:
                     f.write(f"│ {total_timesteps_tag:{metric_padding}}: {int(value)}{spaces}│\n")
             
             # 结束框
-            f.write(f"╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n\n")
+            f.write(f"╰──────────────────────────────────────────────────────────────────────────────╯\n\n")
 
 print("已按照Training Log格式输出到 training_log_steps_0_10_and_51_60.txt")
