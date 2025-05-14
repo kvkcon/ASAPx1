@@ -41,13 +41,13 @@ filtered_data = {'step': filtered_steps}
 
 for tag in tags:
     step_to_value = {s: v for s, v in zip(data[tag]['step'], data[tag]['value'])}
-    filtered_data[tag] = [step_to_value.get(s, None) for s in filtered_steps]
+    filtered_data[tag] = [round(step_to_value.get(s, None), 3) if step_to_value.get(s, None) is not None else None for s in filtered_steps]
 
 # 创建DataFrame
 filtered_df = pd.DataFrame(filtered_data)
 
-# 保存为CSV
-filtered_df.to_csv("steps_0_10_and_51_60_metrics.csv", index=False)
+# 保存为CSV，保留三位小数
+filtered_df.to_csv("steps_0_10_and_51_60_metrics.csv", index=False, float_format="%.3f")
 print("已导出第0-10步和第51-60步的所有指标到 steps_0_10_and_51_60_metrics.csv")
 
 # 打印任何缺失的步骤
@@ -91,7 +91,7 @@ with open("training_log_steps_0_10_and_51_60.txt", "w") as f:
                 if value is not None:
                     # 计算填充所需的空格数以达到格式对齐
                     metric_padding = 35  # 根据需要调整
-                    value_str = f"{value:.4f}" if isinstance(value, float) else str(value)
+                    value_str = f"{value:.3f}" if isinstance(value, float) else str(value)
                     spaces = " " * (130 - len(tag) - len(value_str) - 7)  # 7为其他固定字符的长度
                     
                     formatted_line = f"│ {tag:{metric_padding}}: {value_str}{spaces}│\n"
