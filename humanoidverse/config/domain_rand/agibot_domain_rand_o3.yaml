@@ -1,0 +1,44 @@
+# @package _global_
+
+
+defaults:
+  - domain_rand_base
+
+domain_rand:
+  push_robots: False
+  # push_interval_s:
+  # - 5
+  # - 10
+  # max_push_vel_xy: 1.0
+  randomize_base_mass: True
+  base_com_range:
+    x:
+    - -0.1
+    - 0.1
+    'y':
+    - -0.1
+    - 0.1
+    z:
+    - -0.1
+    - 0.1
+rewards:
+  set_reward: Chen
+  set_reward_date: 20250513
+  only_positive_rewards: false
+  reward_scales:
+    teleop_body_position_extend: 15.0    # Increased from 11.494 to encourage better positioning
+    teleop_vr_3point: 88.889
+    teleop_body_position_feet: 100.0     # Slightly reduced from 116.667 to avoid overemphasis on foot position
+    teleop_body_rotation_extend: 10.0     # Increased slightly to improve rotational control
+    teleop_body_ang_velocity_extend: 0.0  # Reduced to prevent too much focus on angular velocity
+    teleop_body_velocity_extend: 0.0      # Reduced due to minimal positive impact
+    teleop_joint_position: 80.0           # Slightly increased for more precise joint control
+    teleop_joint_velocity: 0.0
+    penalty_torques: -0.001               # Increased penalty to encourage more stability
+    penalty_action_rate: -10.0            # Increased to limit excessive action rate
+    penalty_feet_ori: -370.37
+    feet_heading_alignment: -142.857
+    penalty_slippage: -15.0              # Increased penalty for slippage
+    limits_dof_pos: -100000.0
+    limits_dof_vel: -2500
+    limits_torque: -100.0

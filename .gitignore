@@ -55,7 +55,6 @@ roboverse/data/Recorded/
 roboverse/data/AMASS/
 AMASS/*
 
-*.sh
 *.txt
 
 eval_g129dof_checkpoints
