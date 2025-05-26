@@ -106,7 +106,7 @@ env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.
 robot.asset.self_collisions=0
 
 # 3090 exp2
-nohup HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
+nohup python humanoidverse/train_agent.py \
   +simulator=isaacgym \
   +exp=motion_tracking \
   +domain_rand=agibot_domain_rand \
