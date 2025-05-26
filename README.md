@@ -105,27 +105,27 @@ env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
 env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
 robot.asset.self_collisions=0
 
-# 3090 exp1
-HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
-+simulator=isaacgym \
-+exp=motion_tracking \
-+domain_rand=NO_domain_rand \
-+rewards=motion_tracking/reward_motion_tracking_dm_2real_poseReward_reduce \
-+robot=x1/x1_29dof \
-+terrain=terrain_locomotion_plane \
-+obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
-num_envs=4096 \
-project_name=MotionTracking \
-experiment_name=MotionTracking_Boxlift_29dof_alphabet_changed_urdf_correctHeadlink_poseReward_reduce \
-robot.motion.motion_file="humanoidverse/data/motions/x1_29dof/Test-amass-dance/0-ACCAD_Male2General_c3d_A6Boxliftposes.pkl" \
-rewards.reward_penalty_curriculum=True \
-rewards.reward_penalty_degree=0.00001 \
-env.config.resample_motion_when_training=False \
-env.config.termination.terminate_when_motion_far=True \
-env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
-env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
-env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
-robot.asset.self_collisions=0
+# 3090 exp2
+nohup HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
+  +simulator=isaacgym \
+  +exp=motion_tracking \
+  +domain_rand=agibot_domain_rand \
+  +rewards=motion_tracking/reward_motion_tracking_dm_2real_official \
+  +robot=g1/g1_23dof \
+  +terrain=terrain_locomotion_plane \
+  +obs=motion_tracking/deepmimic_a2c_nolinvel_LARGEnoise_history \
+  num_envs=4096 \
+  project_name=G1_23dof_MotionTracking \
+  experiment_name=StraightPunch_23dof_originReward_randDomain \
+  robot.motion.motion_file="humanoidverse/data/motions/g1_23dof/0-StraightPunch.pkl" \
+  rewards.reward_penalty_curriculum=True \
+  rewards.reward_penalty_degree=0.00001 \
+  env.config.resample_motion_when_training=False \
+  env.config.termination.terminate_when_motion_far=True \
+  env.config.termination_curriculum.terminate_when_motion_far_curriculum=True \
+  env.config.termination_curriculum.terminate_when_motion_far_threshold_min=0.3 \
+  env.config.termination_curriculum.terminate_when_motion_far_curriculum_degree=0.000025 \
+  robot.asset.self_collisions=0 > nohup_StraightPunch.out 2>&1 &
 ```
 
 continue training from ckpt
