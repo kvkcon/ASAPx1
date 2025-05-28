@@ -243,20 +243,18 @@ robot:
 
     nums_extend_bodies: 3
     extend_config:
-      - joint_name: "head_link"
-        parent_name: "pelvis"
-        pos: [0.0, 0.0, 0.4]
+      - joint_name: "left_hand_link"
+        parent_name: "left_elbow_link"
+        pos: [0.25, 0.0, 0.0]
         rot: [1.0, 0.0, 0.0, 0.0] # w x y z
-
-      - joint_name: "left_toe_link"
-        parent_name: "left_ankle_roll_link"
-        pos: [0.08, 0.0, 0.0]
-        rot: [1.0, 0.0, 0.0, 0.0]
-
-      - joint_name: "right_toe_link"
-        parent_name: "right_ankle_roll_link"
-        pos: [0.08, 0.0, 0.0]
-        rot: [1.0, 0.0, 0.0, 0.0]
+      - joint_name: "right_hand_link"
+        parent_name: "right_elbow_link"
+        pos: [0.25, 0.0, 0.0]
+        rot: [1.0, 0.0, 0.0, 0.0] # w x y z
+      - joint_name: "head_link"
+        parent_name: "torso_link"
+        pos: [0.0, 0.0, 0.42]
+        rot: [1.0, 0.0, 0.0, 0.0] # w x y z
 
 
     motion_tracking_link:
