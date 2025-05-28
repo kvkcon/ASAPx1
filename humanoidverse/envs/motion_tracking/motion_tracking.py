@@ -59,7 +59,73 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
             self.terminate_when_motion_far_threshold = self.config.termination_scales.termination_motion_far_threshold
             logger.info(f"Terminate when motion far threshold: {self.terminate_when_motion_far_threshold}")
 
+    #=============== add =================#
+    def get_input_dim(self):
+        obs_key='delta_dynamics_input_obs'
+        if obs_key in self.config.obs.obs_dict:
+            print("delta_dynamics_input_obs dim:",self.config.obs.obs_dict[obs_key]['dim'])
+            return self.config.obs.obs_dict[obs_key]['dim']
+        else:
+            components=[
+                'base_ang_vel',
+                'projected_gravity',
+                'dof_pos',
+                'dof_vel',
+                'actions',
+                'ref_motion_phase'
+            ]
+            obs_dims_dict={key: value for key,value in self.config.obs.obs_dims.items()}
+            print("obs_dims_dict",obs_dims_dict)
+            dim=sum(obs_dims_dict.get(key,0) for key in components)
+            print("dim1",dim) #94
+            
+            if 'history_actor' in self.config.obs.obs_auxiliary:
+                history_config=self.config.obs.obs_auxiliary['history_actor']
+                history_dim=sum(obs_dims_dict.get(key,0)*length for key,length in history_config.items())
+                dim+=history_dim
+            print("dim2",dim) #94
+            return dim
 
+    def get_output_dim(self):
+        state_dims={
+            'motion_dof_pos': self.config.robot.dof_obs_size,
+            'motion_dof_vel': self.config.robot.dof_obs_size,
+            'motion_base_pos_xyz': 3,
+            'motion_base_lin_vel': 3,
+            'motion_base_ang_vel': 3,
+            'motion_base_quat': 4,
+        }
+        return sum(state_dims.values())
+    
+    def parse_delta(self,delta,prefix='pred'):
+        state_dims={
+            'motion_dof_pos': self.config.robot.dof_obs_size,
+            'motion_dof_vel': self.config.robot.dof_obs_size,
+            'motion_base_pos_xyz': 3,
+            'motion_base_lin_vel': 3,
+            'motion_base_ang_vel': 3,
+            'motion_base_quat': 4,
+        }
+        state_idx=0
+        delta_state={}
+        for key,dim in state_dims.items():
+            delta_state[key.replace('motion_',f'{prefix}_')]=delta[:,state_idx:state_idx+dim]
+            state_idx+=dim
+        return delta_state
+
+    def update_delta(self,delta_state_items):
+        pred_state={
+            'dof_pos': self.simulator.dof_pos + delta_state_items['pred_dof_pos'],
+            'dof_vel': self.simulator.dof_vel + delta_state_items['pred_dof_vel'],
+            'base_pos_xyz': self.simulator.robot_root_states[:, 0:3] + delta_state_items['pred_base_pos_xyz'],
+            'base_lin_vel': self.simulator.robot_root_states[:, 7:10] + delta_state_items['pred_base_lin_vel'],
+            'base_ang_vel': self.simulator.robot_root_states[:, 10:13] + delta_state_items['pred_base_ang_vel'],
+            'base_quat': self.simulator.robot_root_states[:, 3:7] + delta_state_items['pred_base_quat'],
+        }
+        pred_state['base_quat'] = pred_state['base_quat'] / torch.norm(pred_state['base_quat'], dim=-1, keepdim=True)
+        return pred_state
+
+    #=============== add =================#
 
         
 
