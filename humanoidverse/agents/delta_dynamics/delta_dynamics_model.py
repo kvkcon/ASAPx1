@@ -193,8 +193,12 @@ class DeltaDynamicsModel(BaseAlgo):
                 # parse tensor to dict
                 delta_state_items = self.env.parse_delta(pred_delta.clone(), 'pred')
                 
-                obs_dict, rew_buf, reset_buf, extras = self.env.step(dict(on_policy=False))
-                
+                actions=self.loaded_policy.get_actions(obs_dict['actor_obs'])
+                actions=actions.to(self.device)
+
+                actor_state={"action":actions,"on_policy":False}
+                obs_dict, rew_buf, reset_buf, extras = self.env.step(actor_state)
+                              
                 pred_state = self.env.update_delta(delta_state_items)
                 
                 # assemble dict to tensor
