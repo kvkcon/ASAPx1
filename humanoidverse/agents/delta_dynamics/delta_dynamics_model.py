@@ -188,19 +188,17 @@ class DeltaDynamicsModel(BaseAlgo):
             loss = 0
             for i in range(self.num_steps_per_env):
                 obs = obs_dict['actor_obs']
-                pred_delta = self.delta_dynamics(obs)
+                delta_action = self.delta_dynamics(obs)
                 # print('True')
                 # parse tensor to dict
-                delta_state_items = self.env.parse_delta(pred_delta.clone(), 'pred')
                 
-                actions=self.loaded_policy.get_actions(obs_dict['actor_obs'])
-                actions=actions.to(self.device)
+                pre_train_action = self.loaded_policy.eval_policy(obs).detach()
+                integrated_actions = delta_action + pre_train_action
 
-                actor_state={"action":actions,"on_policy":False}
-                obs_dict, rew_buf, reset_buf, extras = self.env.step(actor_state)
-                              
-                pred_state = self.env.update_delta(delta_state_items)
-                
+                actor_state={"action":integrated_actions,"on_policy":False}
+                obs_dict, rew_buf, reset_buf, extras = self.env.step(actor_state) 
+                pred_state=obs_dict
+
                 # assemble dict to tensor
                 pred = self.env.assemble_delta(pred_state)
                 target = obs_dict['delta_dynamics_motion_state_obs']
