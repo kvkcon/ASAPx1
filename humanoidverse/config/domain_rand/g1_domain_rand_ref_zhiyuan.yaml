@@ -1,0 +1,128 @@
+# @package _global_
+
+defaults:
+  - domain_rand_base
+
+domain_rand:
+  push_robots : True
+  push_interval_s: [4, 10]
+  update_step: 48000  # 2000 * 24
+  push_duration: [0, 0.05, 0.1, 0.15, 0.2, 0.25]
+  max_push_vel_xy: 0.2
+  max_push_ang_vel: 0.2
+
+  # friction and restitution
+  randomize_friction : True
+  friction_range: [0.2, 1.3]
+  restitution_range: [0.0, 0.4]
+
+  # base mass
+  randomize_base_mass: False
+  added_mass_range: [-3, 3]
+
+  # center of mass
+  randomize_com: False
+  com_displacement_range:
+    x: [-0.05, 0.05]
+    y: [-0.05, 0.05]
+    z: [-0.05, 0.05]
+
+  # pd gains
+  randomize_gains: True
+  stiffness_multiplier_range: [0.8, 1.2]
+  damping_multiplier_range: [0.8, 1.2]
+
+  # torque
+  randomize_torque: True
+  torque_multiplier_range: [0.8, 1.2]
+  randomize_torque_rfi: False
+
+  # link mass
+  randomize_link_mass : False
+  link_mass_range : [0.9, 1.1]
+  added_link_mass_range: [0.9, 1.1]
+  randomize_link_body_names : [
+      'base_link', 'link_left_hip_yaw', 'link_left_hip_roll', 'link_left_hip_pitch', 'link_left_knee_pitch',
+      'link_right_hip_yaw', 'link_right_hip_roll', 'link_right_hip_pitch', 'link_right_knee_pitch',
+  ]
+
+  # motor offset
+  randomize_motor_offset: False
+  motor_offset_range: [-0.035, 0.035]
+
+  # joint friction
+  randomize_joint_friction: True
+  randomize_joint_friction_each_joint: False
+  joint_friction_range: [0.01, 1.15]
+  # joint_1_friction_range: [0.01, 1.15]
+  # joint_2_friction_range: [0.01, 1.15]
+  # joint_3_friction_range: [0.01, 1.15]
+  # joint_4_friction_range: [0.5, 1.3]
+  # joint_5_friction_range: [0.5, 1.3]
+  # joint_6_friction_range: [0.01, 1.15]
+  # joint_7_friction_range: [0.01, 1.15]
+  # joint_8_friction_range: [0.01, 1.15]
+  # joint_9_friction_range: [0.5, 1.3]
+  # joint_10_friction_range: [0.5, 1.3]
+
+  # joint damping
+  randomize_joint_damping: True
+  randomize_joint_damping_each_joint: False
+  joint_damping_range: [0.3, 1.5]
+  # joint_1_damping_range: [0.3, 1.5]
+  # joint_2_damping_range: [0.3, 1.5]
+  # joint_3_damping_range: [0.3, 1.5]
+  # joint_4_damping_range: [0.9, 1.5]
+  # joint_5_damping_range: [0.9, 1.5]
+  # joint_6_damping_range: [0.3, 1.5]
+  # joint_7_damping_range: [0.3, 1.5]
+  # joint_8_damping_range: [0.3, 1.5]
+  # joint_9_damping_range: [0.9, 1.5]
+  # joint_10_damping_range: [0.9, 1.5]
+
+  # joint armature
+  randomize_joint_armature: False
+  randomize_joint_armature_each_joint: False
+  joint_armature_range: [0.0001, 0.05]
+  # joint_1_armature_range: [0.0001, 0.05]
+  # joint_2_armature_range: [0.0001, 0.05]
+  # joint_3_armature_range: [0.0001, 0.05]
+  # joint_4_armature_range: [0.0001, 0.05]
+  # joint_5_armature_range: [0.0001, 0.05]
+  # joint_6_armature_range: [0.0001, 0.05]
+  # joint_7_armature_range: [0.0001, 0.05]
+  # joint_8_armature_range: [0.0001, 0.05]
+  # joint_9_armature_range: [0.0001, 0.05]
+  # joint_10_armature_range: [0.0001, 0.05]
+
+  # lag and delays
+  add_lag: True
+  randomize_lag_timesteps: True
+  randomize_lag_timesteps_perstep: False
+  lag_timesteps_range: [5, 40]
+  
+  add_dof_lag: True
+  randomize_dof_lag_timesteps: True
+  randomize_dof_lag_timesteps_perstep: False
+  dof_lag_timesteps_range: [0, 40]
+  
+  add_dof_pos_vel_lag: True
+  randomize_dof_pos_lag_timesteps: False
+  randomize_dof_pos_lag_timesteps_perstep: False
+  dof_pos_lag_timesteps_range: [7, 25]
+  randomize_dof_vel_lag_timesteps: False
+  randomize_dof_vel_lag_timesteps_perstep: False
+  dof_vel_lag_timesteps_range: [7, 25]
+  
+  add_imu_lag: False
+  randomize_imu_lag_timesteps: True
+  randomize_imu_lag_timesteps_perstep: False
+  imu_lag_timesteps_range: [1, 10]
+  # control delay
+  randomize_ctrl_delay: True
+  ctrl_delay_step_range: [0, 2]
+  
+  # coulomb friction
+  randomize_coulomb_friction: True
+  joint_coulomb_range: [0.1, 0.9]
+  joint_viscous_range: [0.05, 0.1]
