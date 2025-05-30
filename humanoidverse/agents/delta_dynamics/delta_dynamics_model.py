@@ -83,9 +83,9 @@ class DeltaDynamicsModel(BaseAlgo):
             # import ipdb; ipdb.set_trace()   
             self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
 
-            # load pretrained policy
-            if config.pretrained_policy is not None:
-                self._load_pretrained_policy(config, env, device)
+        # load pretrained policy
+        if config.pretrained_policy is not None:
+            self._load_pretrained_policy(config, env, device)
         
         self.device= device
         self.env = env
