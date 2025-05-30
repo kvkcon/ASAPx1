@@ -22,7 +22,7 @@ algo:
     desired_kl: 0.01
 
     num_steps_per_env: 24
-    save_interval: 2000
+    save_interval: 100
 
     load_optimizer: True
 
