@@ -82,10 +82,7 @@ class DeltaDynamicsModel(BaseAlgo):
             
             # import ipdb; ipdb.set_trace()   
             self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
-
-        # load pretrained policy
-        if config.pretrained_policy is not None:
-            self._load_pretrained_policy(config, env, device)
+        
         
         self.device= device
         self.env = env
@@ -100,54 +97,6 @@ class DeltaDynamicsModel(BaseAlgo):
         self.delta_dynamics_path = config.delta_dynamics_path
         # if self.delta_dynamics_path is not None:
         #     self.load(self.delta_dynamics_path)
-
-    def _load_pretrained_policy(self, config, env, device):
-        """加载预训练的策略网络"""
-        has_config = True
-        checkpoint = Path(config.policy_checkpoint)
-        config_path = checkpoint.parent / "config.yaml"
-        if not config_path.exists():
-            config_path = checkpoint.parent.parent / "config.yaml"
-            if not config_path.exists():
-                has_config = False
-                logger.error(f"Could not find config path: {config_path}")
-
-        if has_config:
-            logger.info(f"Loading training config file from {config_path}")
-            with open(config_path) as file:
-                policy_config = OmegaConf.load(file)
-
-            if policy_config.eval_overrides is not None:
-                policy_config = OmegaConf.merge(
-                    policy_config, policy_config.eval_overrides
-                )
-        
-        pre_process_config(policy_config)
-        
-        # 1. 实例化预训练策略（包含网络权重初始化）
-        self.loaded_policy: BaseAlgo = instantiate(
-            policy_config.algo, 
-            env=env, 
-            device=device, 
-            log_dir=None
-        )
-        self.loaded_policy.algo_obs_dim_dict = policy_config.env.config.robot.algo_obs_dim_dict
-        
-        # 2. 设置网络结构
-        self.loaded_policy.setup()
-        
-        # 3. 加载预训练权重（覆盖初始化的权重）
-        self.loaded_policy.load(config.policy_checkpoint)
-        
-        # 4. 切换到评估模式
-        self.loaded_policy._eval_mode()
-        
-        # 5. 冻结网络参数
-        for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
-            param.requires_grad = False
-        
-        # 6. 创建推理策略函数
-        self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
 
     def _init_config(self):
         # Env related Config
@@ -243,9 +192,8 @@ class DeltaDynamicsModel(BaseAlgo):
                 # print('True')
                 # parse tensor to dict
                 
-                # reference: pretrain阶段得到的策略网络输出计算pre_train_action(23 actions dim)
                 with torch.no_grad():
-                    pre_train_action = self.loaded_policy.eval_policy(obs_dict['actor_obs'])
+                    pre_train_action = self.loaded_policy.eval_policy(obs_dict['actor_obs']).detach()
 
                 integrated_actions = delta_action + pre_train_action
 
