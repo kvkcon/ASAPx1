@@ -187,7 +187,7 @@ class DeltaDynamicsModel(BaseAlgo):
             # collect gradients
             loss = 0
             for i in range(self.num_steps_per_env):
-                obs = obs_dict['actor_obs']
+                obs = obs_dict['delta_dynamics_motion_state_obs']
                 delta_action = self.delta_dynamics(obs)
                 # print('True')
                 # parse tensor to dict
