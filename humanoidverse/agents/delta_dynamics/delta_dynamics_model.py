@@ -192,7 +192,9 @@ class DeltaDynamicsModel(BaseAlgo):
                 # print('True')
                 # parse tensor to dict
                 
-                pre_train_action = self.loaded_policy.eval_policy(obs).detach()
+                with torch.no_grad():
+                    pre_train_action = self.loaded_policy.eval_policy(obs_dict['actor_obs']).detach()
+
                 integrated_actions = delta_action + pre_train_action
 
                 actor_state={"action":integrated_actions,"on_policy":False}
