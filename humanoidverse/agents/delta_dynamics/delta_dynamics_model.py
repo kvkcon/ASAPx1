@@ -15,6 +15,7 @@ from loguru import logger
 from pathlib import Path
 from omegaconf import OmegaConf
 from humanoidverse.utils.helpers import pre_process_config
+import joblib
 
 class DeltaDynamics_NN(nn.Module):
     def __init__(self, input_dim, output_dim):
@@ -166,6 +167,12 @@ class DeltaDynamicsModel(BaseAlgo):
     def _train_mode(self):
         self.delta_dynamics.train()
         
+    def _load_real_data(self,motion_file):
+        motion_path=os.path.join(os.path.dirname(__file__),'..',motion_file)
+        motion_data=joblib.load(motion_path)
+        value=motion_data['frames']
+        return value
+
     def learn(self):
         self._train_mode()
         obs_dict = self.env.reset_all()
@@ -178,6 +185,7 @@ class DeltaDynamicsModel(BaseAlgo):
                 # TODO: Change hardcoded number
                 self.env.resample_motion()
                 
+            real_state=self._load_real_data(self.robot.motion.motion_file)
             
             obs_dict = self.env.reset_all()
 
@@ -186,7 +194,7 @@ class DeltaDynamicsModel(BaseAlgo):
 
             # collect gradients
             loss = 0
-            for i in range(self.num_steps_per_env):
+            for i in range(len(real_state)):
                 obs = obs_dict['actor_obs']
                 delta_action = self.delta_dynamics(obs)
                 # print('True')
@@ -203,11 +211,10 @@ class DeltaDynamicsModel(BaseAlgo):
 
                 # assemble dict to tensor
                 pred = self.env.assemble_delta(pred_state)
-                target = obs_dict['delta_dynamics_motion_state_obs']
                 # loss += self.delta_dynamics_loss(pred, target)
                 # print('Loss: ', loss)
                 
-                target_state_items = self.env.parse_delta(target.clone(), 'target')
+                target_state_items=real_state[i]
                 # calculate losses for different components
                 loss_dof_pos = self.delta_dynamics_loss(pred_state['dof_pos'], target_state_items['motion_dof_pos']) 
                 loss_dof_vel = self.delta_dynamics_loss(pred_state['dof_vel'], target_state_items['motion_dof_vel']) 
