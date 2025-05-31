@@ -218,21 +218,17 @@ class DeltaDynamicsModel(BaseAlgo):
                 # calculate losses for different components
                 loss_dof_pos = self.delta_dynamics_loss(pred_state['dof_pos'], target_state_items['motion_dof_pos']) 
                 loss_dof_vel = self.delta_dynamics_loss(pred_state['dof_vel'], target_state_items['motion_dof_vel']) 
-                loss_base_pos_xyz = self.delta_dynamics_loss(pred_state['base_pos_xyz'], target_state_items['motion_base_pos_xyz'])  
                 loss_base_lin_vel = self.delta_dynamics_loss(pred_state['base_lin_vel'], target_state_items['motion_base_lin_vel'])  
                 loss_base_ang_vel = self.delta_dynamics_loss(pred_state['base_ang_vel'], target_state_items['motion_base_ang_vel'])
-                loss_base_quat = self.delta_dynamics_loss(pred_state['base_quat'], target_state_items['motion_base_quat'])   
                 
-                loss = loss_dof_pos + loss_dof_vel + loss_base_pos_xyz + loss_base_lin_vel + loss_base_ang_vel + loss_base_quat
+                loss = loss_dof_pos + loss_dof_vel + loss_base_lin_vel + loss_base_ang_vel
                 
             # update model
             self.writer.add_scalar('Loss', loss.item(), it)
             self.writer.add_scalar('Loss_dof_pos', loss_dof_pos.item(), it)
             self.writer.add_scalar('Loss_dof_vel', loss_dof_vel.item(), it)
-            self.writer.add_scalar('Loss_base_pos_xyz', loss_base_pos_xyz.item(), it)
             self.writer.add_scalar('Loss_base_lin_vel', loss_base_lin_vel.item(), it)
             self.writer.add_scalar('Loss_base_ang_vel', loss_base_ang_vel.item(), it)
-            self.writer.add_scalar('Loss_base_quat', loss_base_quat.item(), it)
             
             loss.backward()
             self.delta_dynamics_optimizer.step()
