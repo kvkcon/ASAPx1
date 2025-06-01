@@ -2,6 +2,6 @@
 
 defaults:
   - /algo: delta
-  - /env: motion_tracking
+  - /env: delta_dynamics_training_env
 
-experiment_name: TEST_Motion_Tracking
+experiment_name: TEST_DeltaDynamics_Training
