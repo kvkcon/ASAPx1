@@ -1,0 +1,7 @@
+# @package _global_
+
+defaults:
+  - /algo: delta
+  - /env: motion_tracking
+
+experiment_name: TEST_Motion_Tracking
