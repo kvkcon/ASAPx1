@@ -97,6 +97,13 @@ class LeggedRobotMotionTracking(LeggedRobotBase):
         }
         return sum(state_dims.values())
     
+    def get_delta_output_dim(self):
+        state_dims={
+            'motion_dof_pos': self.config.robot.dof_obs_size,
+        }
+        return sum(state_dims.values())
+
+    
     def parse_delta(self,delta,prefix='pred'):
         state_dims={
             'motion_dof_pos': self.config.robot.dof_obs_size,
