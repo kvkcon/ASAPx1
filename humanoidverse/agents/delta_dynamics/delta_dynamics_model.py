@@ -155,7 +155,7 @@ class DeltaDynamicsModel(BaseAlgo):
         
     def _setup_models_and_optimizer(self):
         self.input_dim = self.env.get_input_dim()
-        self.output_dim = self.env.get_output_dim()  
+        self.output_dim = 23
 
         self.delta_dynamics = DeltaDynamics_NN(self.input_dim, self.output_dim)
         self.delta_dynamics.to(self.device)
