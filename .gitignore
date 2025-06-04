@@ -54,7 +54,7 @@ roboverse/data/Recorded/
 roboverse/data/AMASS/
 AMASS/*
 
-*.txt
+# *.txt
 
 eval_g129dof_checkpoints
 _isaac_sim
