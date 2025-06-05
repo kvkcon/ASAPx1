@@ -32,6 +32,7 @@ from humanoidverse.utils.helpers import pre_process_config
 from humanoidverse.agents.base_algo.base_algo import BaseAlgo 
 from hydra.utils import instantiate
 
+from delta_dynamics.delta_dynamics_model import DeltaDynamics_NN
 
 class PPODeltaA(PPO):
     def __init__(self,
@@ -40,49 +41,9 @@ class PPODeltaA(PPO):
                  log_dir=None,
                  device='cpu'):
         super().__init__(env, config, log_dir, device)
-
-        if config.policy_checkpoint is not None:
-            has_config = True
-            checkpoint = Path(config.policy_checkpoint)
-            config_path = checkpoint.parent / "config.yaml"
-            if not config_path.exists():
-                config_path = checkpoint.parent.parent / "config.yaml"
-                if not config_path.exists():
-                    has_config = False
-                    logger.error(f"Could not find config path: {config_path}")
-
-            if has_config:
-                logger.info(f"Loading training config file from {config_path}")
-                with open(config_path) as file:
-                    policy_config = OmegaConf.load(file)
-
-                if policy_config.eval_overrides is not None:
-                    policy_config = OmegaConf.merge(
-                        policy_config, policy_config.eval_overrides
-                    )
-            
-        pre_process_config(policy_config)
-        
-        self.loaded_policy: BaseAlgo = instantiate(policy_config.algo, env=env, device=device, log_dir=None)
-        self.loaded_policy.algo_obs_dim_dict = policy_config.env.config.robot.algo_obs_dim_dict
-        self.loaded_policy.setup()
-        # import ipdb; ipdb.set_trace()
-        # for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
-        #     if name == '6.bias':
-        #         print(f"Parameter name: {name}, Parameter:  {param}")
-        self.loaded_policy.load(config.policy_checkpoint)
-
-        
-        # import ipdb; ipdb.set_trace()
-        self.loaded_policy._eval_mode()
-
-        for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
-            param.requires_grad = False
-            # print(f"Parameter name: {name}, Parameter: {param}, Requires Grad: {param.requires_grad}")
-        
-        # import ipdb; ipdb.set_trace()   
-        self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
-        
+    
+        self._load_pretrain_policy(config.policy_checkpoint)
+        self.delta_model=self._load_delta_model(config.delta_checkpoint)
 
         # ----------------- UNCOMMENT THIS FOR ANALYTIC SEARCH FOR OPTIMAL ACTION BASED ON DELTA_A -----------------
         # if not hasattr(env, 'loaded_extra_policy'):
@@ -96,6 +57,34 @@ class PPODeltaA(PPO):
     # def _actor_act_step(self, obs_dict):
     #     actions = self.actor.act(obs_dict["actor_obs"])
     #     return self.actor.act_inference(obs_dict["actor_obs"])
+
+    def _load_pretrain_policy(self,checkpoint_path):
+        #Load pre-trained weights
+        checkpoint=torch.load(checkpoint_path)
+        self.actor.load_state_dict(checkpoint['actor_model_state_dict'])
+
+        #Load critic weights
+        self.critic.load_state_dict(checkpoint['critic_model_state_dict'])
+
+        logger.info(f"Loaded pretrained policy from {checkpoint_path}")
+
+    def _load_delta_model(self,checkpoint_path):
+        #Create model
+        self.input_dim = self.env.get_input_dim()
+        self.output_dim = self.env.get_delta_output_dim()
+        delta_model=DeltaDynamics_NN(self.input_dim,self.output_dim).to(self.device)
+
+        #Loading weight
+        checkpoint=torch.load(checkpoint_path)
+        delta_model.load_state_dict(checkpoint['delta_dynamics'])
+
+        #Freeze parameters
+        for param in delta_model.parameters():
+            param.requires_grad=False
+        delta_model.eval()
+
+        logger.info(f"Loaded delta policy from {checkpoint_path}")
+        return delta_model
 
 
     def _rollout_step(self, obs_dict):
@@ -123,8 +112,10 @@ class PPODeltaA(PPO):
                 actor_state["actions"] = actions
                 
                 ################ inference the policy ################
-                policy_output = self.loaded_policy.eval_policy(obs_dict['closed_loop_actor_obs']).detach()
-                actor_state["actions_closed_loop"] = policy_output
+                #delta action
+                with torch.no_grad():
+                    delta_action=self.delta_model(obs_dict['actor_obs'])
+                    actor_state['actions_closed_loop']=delta_action
 
                 
 
