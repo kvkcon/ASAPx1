@@ -231,121 +231,163 @@ class MotionLibBase():
         return return_dict
     
     def load_motions(self, 
-                     random_sample=True, 
-                     start_idx=0, 
-                     max_len=-1, 
-                     target_heading = None):
-        # import ipdb; ipdb.set_trace()
-
+                    random_sample=True, 
+                    start_idx=0, 
+                    max_len=-1, 
+                    target_heading=None):
+        """
+        Load delta motion data for robot control
+        """
+        
         motions = []
         _motion_lengths = []
         _motion_fps = []
         _motion_dt = []
         _motion_num_frames = []
-        _motion_bodies = []
-        _motion_aa = []
-        has_action = False
+        _motion_delta_pos = []
+        _motion_delta_rot = []
         _motion_actions = []
+        has_action = False
         
-        if flags.real_traj:
-            self.q_gts, self.q_grs, self.q_gavs, self.q_gvs = [], [], [], []
+        # Initialize delta-specific data containers
+        if hasattr(self, 'use_delta_targets') and self.use_delta_targets:
+            self.delta_positions = []
+            self.delta_orientations = []
+            self.delta_velocities = []
+            self.delta_angular_velocities = []
 
         total_len = 0.0
-        self.num_joints = len(self.skeleton_tree.node_names)
+        self.num_joints = self.config.num_joints if hasattr(self.config, 'num_joints') else 12
         num_motion_to_load = self.num_envs
 
+        # Sample motion indices
         if random_sample:
             sample_idxes = torch.multinomial(self._sampling_prob, num_samples=num_motion_to_load, replacement=True).to(self._device)
         else:
-            sample_idxes = torch.remainder(torch.arange(num_motion_to_load) + start_idx, self._num_unique_motions ).to(self._device)
+            sample_idxes = torch.remainder(torch.arange(num_motion_to_load) + start_idx, self._num_unique_motions).to(self._device)
 
         self._curr_motion_ids = sample_idxes
         self.curr_motion_keys = self._motion_data_keys[sample_idxes.cpu()]
-        # self._sampling_batch_prob = self._sampling_prob[self._curr_motion_ids] / self._sampling_prob[self._curr_motion_ids].sum()
-
-        logger.info(f"Loading {num_motion_to_load} motions...")
+        
+        logger.info(f"Loading {num_motion_to_load} delta motions...")
         logger.info(f"Sampling motion: {sample_idxes[:5]}, ....")
         logger.info(f"Current motion keys: {self.curr_motion_keys[:5]}, ....")
 
         motion_data_list = self._motion_data_list[sample_idxes.cpu().numpy()]
-        res_acc = self.load_motion_with_skeleton(motion_data_list, self.fix_height, target_heading, max_len)
-        for f in track(range(len(res_acc)), description="Loading motions..."):
-            motion_file_data, curr_motion = res_acc[f]
-            motion_fps = curr_motion.fps
+        
+        # Load and process delta motion data
+        for f in track(range(len(motion_data_list)), description="Loading delta motions..."):
+            motion_data = motion_data_list[f]
+            
+            # Extract basic motion properties
+            motion_fps = motion_data.get('fps', 30.0)  # Default 30 FPS
             curr_dt = 1.0 / motion_fps
-            num_frames = curr_motion.global_rotation.shape[0]
-            curr_len = 1.0 / motion_fps * (num_frames - 1)
-
-            if "beta" in motion_file_data:
-                _motion_aa.append(motion_file_data['pose_aa'].reshape(-1, self.num_joints * 3))
-                _motion_bodies.append(curr_motion.gender_beta)
+            
+            # Process delta data - assuming delta data structure
+            if 'delta_positions' in motion_data:
+                delta_pos = motion_data['delta_positions']
+                delta_rot = motion_data.get('delta_rotations', np.zeros_like(delta_pos))
+            elif 'joint_deltas' in motion_data:
+                # Alternative delta format
+                joint_deltas = motion_data['joint_deltas']
+                delta_pos = joint_deltas[:, :self.num_joints]
+                delta_rot = joint_deltas[:, self.num_joints:] if joint_deltas.shape[1] > self.num_joints else np.zeros_like(delta_pos)
             else:
-                _motion_aa.append(np.zeros((num_frames, self.num_joints * 3)))
-                _motion_bodies.append(torch.zeros(17))
-
+                # Fallback: compute deltas from absolute positions
+                abs_pos = motion_data.get('positions', motion_data.get('joint_positions'))
+                if abs_pos is not None:
+                    delta_pos = np.diff(abs_pos, axis=0, prepend=abs_pos[0:1])
+                    delta_rot = np.zeros_like(delta_pos)
+                else:
+                    raise ValueError(f"No valid delta or position data found in motion {f}")
+            
+            num_frames = delta_pos.shape[0]
+            curr_len = curr_dt * (num_frames - 1)
+            
+            # Apply max_len constraint if specified
+            if max_len > 0 and curr_len > max_len:
+                max_frames = int(max_len / curr_dt) + 1
+                delta_pos = delta_pos[:max_frames]
+                delta_rot = delta_rot[:max_frames]
+                num_frames = max_frames
+                curr_len = curr_dt * (num_frames - 1)
+            
+            # Store motion data
+            _motion_delta_pos.append(delta_pos)
+            _motion_delta_rot.append(delta_rot)
             _motion_fps.append(motion_fps)
             _motion_dt.append(curr_dt)
             _motion_num_frames.append(num_frames)
-            motions.append(curr_motion)
             _motion_lengths.append(curr_len)
-            if self.has_action:
-                _motion_actions.append(curr_motion.action)
             
-            if flags.real_traj:
-                self.q_gts.append(curr_motion.quest_motion['quest_trans'])
-                self.q_grs.append(curr_motion.quest_motion['quest_rot'])
-                self.q_gavs.append(curr_motion.quest_motion['global_angular_vel'])
-                self.q_gvs.append(curr_motion.quest_motion['linear_vel'])
+            # Handle actions if present
+            if 'actions' in motion_data:
+                actions = motion_data['actions']
+                if len(actions) != num_frames:
+                    # Interpolate or pad actions to match frames
+                    actions = np.resize(actions, (num_frames,) + actions.shape[1:])
+                _motion_actions.append(actions)
+                has_action = True
+            
+            # Handle delta-specific trajectory data
+            if hasattr(self, 'use_delta_targets') and self.use_delta_targets:
+                self.delta_positions.append(motion_data.get('delta_base_pos', np.zeros((num_frames, 3))))
+                self.delta_orientations.append(motion_data.get('delta_base_rot', np.zeros((num_frames, 4))))
+                self.delta_velocities.append(motion_data.get('delta_linear_vel', np.zeros((num_frames, 3))))
+                self.delta_angular_velocities.append(motion_data.get('delta_angular_vel', np.zeros((num_frames, 3))))
+            
+            # Create a simple motion object for delta data
+            curr_motion = type('DeltaMotion', (), {
+                'delta_positions': delta_pos,
+                'delta_rotations': delta_rot,
+                'fps': motion_fps,
+                'num_frames': num_frames,
+                'length': curr_len
+            })()
+            
+            if has_action:
+                curr_motion.actions = actions
                 
-            del curr_motion
+            motions.append(curr_motion)
         
+        # Convert to tensors and move to device
         self._motion_lengths = torch.tensor(_motion_lengths, device=self._device, dtype=torch.float32)
         self._motion_fps = torch.tensor(_motion_fps, device=self._device, dtype=torch.float32)
-        self._motion_bodies = torch.stack(_motion_bodies).to(self._device).type(torch.float32)
-        self._motion_aa = torch.tensor(np.concatenate(_motion_aa), device=self._device, dtype=torch.float32)
-
         self._motion_dt = torch.tensor(_motion_dt, device=self._device, dtype=torch.float32)
         self._motion_num_frames = torch.tensor(_motion_num_frames, device=self._device)
-        # import ipdb; ipdb.set_trace()
-        if self.has_action:
-            self._motion_actions = torch.cat(_motion_actions, dim=0).float().to(self._device)
+        
+        # Concatenate delta motion data
+        self.delta_positions = torch.cat([torch.tensor(dp, dtype=torch.float32) for dp in _motion_delta_pos], dim=0).to(self._device)
+        self.delta_rotations = torch.cat([torch.tensor(dr, dtype=torch.float32) for dr in _motion_delta_rot], dim=0).to(self._device)
+        
+        if has_action:
+            self._motion_actions = torch.cat([torch.tensor(ma, dtype=torch.float32) for ma in _motion_actions], dim=0).to(self._device)
+            self.has_action = True
+        
+        # Handle delta trajectory data
+        if hasattr(self, 'use_delta_targets') and self.use_delta_targets:
+            self.delta_base_positions = torch.cat([torch.tensor(dp, dtype=torch.float32) for dp in self.delta_positions], dim=0).to(self._device)
+            self.delta_base_orientations = torch.cat([torch.tensor(do, dtype=torch.float32) for do in self.delta_orientations], dim=0).to(self._device)
+            self.delta_base_velocities = torch.cat([torch.tensor(dv, dtype=torch.float32) for dv in self.delta_velocities], dim=0).to(self._device)
+            self.delta_base_angular_velocities = torch.cat([torch.tensor(dav, dtype=torch.float32) for dav in self.delta_angular_velocities], dim=0).to(self._device)
+        
         self._num_motions = len(motions)
         
-        self.gts = torch.cat([m.global_translation for m in motions], dim=0).float().to(self._device)
-        self.grs = torch.cat([m.global_rotation for m in motions], dim=0).float().to(self._device)
-        self.lrs = torch.cat([m.local_rotation for m in motions], dim=0).float().to(self._device)
-        self.grvs = torch.cat([m.global_root_velocity for m in motions], dim=0).float().to(self._device)
-        self.gravs = torch.cat([m.global_root_angular_velocity for m in motions], dim=0).float().to(self._device)
-        self.gavs = torch.cat([m.global_angular_velocity for m in motions], dim=0).float().to(self._device)
-        self.gvs = torch.cat([m.global_velocity for m in motions], dim=0).float().to(self._device)
-        self.dvs = torch.cat([m.dof_vels for m in motions], dim=0).float().to(self._device)
-        
-        if "global_translation_extend" in motions[0].__dict__:
-            self.gts_t = torch.cat([m.global_translation_extend for m in motions], dim=0).float().to(self._device)
-            self.grs_t = torch.cat([m.global_rotation_extend for m in motions], dim=0).float().to(self._device)
-            self.gvs_t = torch.cat([m.global_velocity_extend for m in motions], dim=0).float().to(self._device)
-            self.gavs_t = torch.cat([m.global_angular_velocity_extend for m in motions], dim=0).float().to(self._device)
-        
-        if "dof_pos" in motions[0].__dict__:
-            self.dof_pos = torch.cat([m.dof_pos for m in motions], dim=0).float().to(self._device)
-        # import ipdb; ipdb.set_trace()
-        if flags.real_traj:
-            self.q_gts = torch.cat(self.q_gts, dim=0).float().to(self._device)
-            self.q_grs = torch.cat(self.q_grs, dim=0).float().to(self._device)
-            self.q_gavs = torch.cat(self.q_gavs, dim=0).float().to(self._device)
-            self.q_gvs = torch.cat(self.q_gvs, dim=0).float().to(self._device)
-        
+        # Calculate motion indexing
         lengths = self._motion_num_frames
         lengths_shifted = lengths.roll(1)
         lengths_shifted[0] = 0
         self.length_starts = lengths_shifted.cumsum(0)
         self.motion_ids = torch.arange(len(motions), dtype=torch.long, device=self._device)
-        motion = motions[0]
+        
+        # Set number of bodies (for delta data, this might be different)
         self.num_bodies = self.num_joints
         
+        # Summary
         num_motions = self.num_motions()
         total_len = self.get_total_length()
-        logger.info(f"Loaded {num_motions:d} motions with a total length of {total_len:.3f}s and {self.gts.shape[0]} frames.")
+        logger.info(f"Loaded {num_motions:d} delta motions with a total length of {total_len:.3f}s and {self.delta_positions.shape[0]} frames.")
+        
         return motions
 
     def fix_trans_height(self, pose_aa, trans, fix_height_mode):
