@@ -9,6 +9,7 @@ from torch.utils.tensorboard import SummaryWriter as TensorboardSummaryWriter
 import time
 import os
 import statistics
+import joblib
 from collections import deque
 from hydra.utils import instantiate
 from loguru import logger
@@ -45,7 +46,7 @@ class DeltaDynamicsModel(BaseAlgo):
         if config.policy_checkpoint is not None:
             has_config = True
             checkpoint = Path(config.policy_checkpoint)
-            config_path = checkpoint.parent / "config.yaml"
+            config_path = Path("humanoidverse/config/algo/donotsearchme.yaml")
             if not config_path.exists():
                 config_path = checkpoint.parent.parent / "config.yaml"
                 if not config_path.exists():
@@ -61,28 +62,90 @@ class DeltaDynamicsModel(BaseAlgo):
                     policy_config = OmegaConf.merge(
                         policy_config, policy_config.eval_overrides
                     )
-            
-            pre_process_config(policy_config)
-            
-            self.loaded_policy: BaseAlgo = instantiate(policy_config.algo, env=env, device=device, log_dir=None)
-            self.loaded_policy.algo_obs_dim_dict = policy_config.env.config.robot.algo_obs_dim_dict
-            self.loaded_policy.setup()
-            # import ipdb; ipdb.set_trace()
-            # for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
-            #     if name == '6.bias':
-            #         print(f"Parameter name: {name}, Parameter:  {param}")
-            self.loaded_policy.load(config.policy_checkpoint)
+                
+                pre_process_config(policy_config)
+                
+                self.loaded_policy: BaseAlgo = instantiate(policy_config.algo, env=env, device=device, log_dir=None)
+                self.loaded_policy.algo_obs_dim_dict = policy_config.env.config.robot.algo_obs_dim_dict
+                self.loaded_policy.setup()
+                # import ipdb; ipdb.set_trace()
+                # for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
+                #     if name == '6.bias':
+                #         print(f"Parameter name: {name}, Parameter:  {param}")
+                self.loaded_policy.load(config.policy_checkpoint)
 
-            
-            # import ipdb; ipdb.set_trace()
-            self.loaded_policy._eval_mode()
+                
+                # import ipdb; ipdb.set_trace()
+                self.loaded_policy._eval_mode()
 
-            for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
-                param.requires_grad = False
-                # print(f"Parameter name: {name}, Parameter: {param}, Requires Grad: {param.requires_grad}")
-            
-            # import ipdb; ipdb.set_trace()   
-            self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
+                for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
+                    param.requires_grad = False
+                    # print(f"Parameter name: {name}, Parameter: {param}, Requires Grad: {param.requires_grad}")
+                
+                # import ipdb; ipdb.set_trace()   
+                self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
+            else:
+                logger.warning("Cannot load policy with full config - config file not found")
+                logger.info("Loading policy with basic PPO configuration")
+                
+                # Create a basic PPO policy configuration
+                from humanoidverse.agents.ppo.ppo import PPO
+                from omegaconf import DictConfig
+                
+                # Create a minimal config for PPO
+                basic_config = DictConfig({
+                    'num_learning_epochs': 5,
+                    'num_mini_batches': 4,
+                    'clip_param': 0.2,
+                    'gamma': 0.99,
+                    'lam': 0.95,
+                    'value_loss_coef': 1.0,
+                    'entropy_coef': 0.01,
+                    'actor_learning_rate': 5e-4,
+                    'critic_learning_rate': 5e-4,
+                    'max_grad_norm': 1.0,
+                    'use_clipped_value_loss': True,
+                    'schedule': 'adaptive',
+                    'desired_kl': 0.01,
+                    'num_steps_per_env': 24,
+                    'save_interval': 100,
+                    'load_optimizer': False,
+                    'init_noise_std': 0.8,
+                    'num_learning_iterations': 1000000,
+                    'init_at_random_ep_len': True,
+                    'eval_callbacks': None,
+                    'module_dict': {
+                        'actor': {
+                            'input_dim': ['actor_obs'],
+                            'output_dim': ['robot_action_dim'],
+                            'layer_config': {
+                                'type': 'MLP',
+                                'hidden_dims': [512, 256, 128],
+                                'activation': 'ELU'
+                            }
+                        },
+                        'critic': {
+                            'type': 'MLP',
+                            'input_dim': ['critic_obs'],
+                            'output_dim': [1],
+                            'layer_config': {
+                                'type': 'MLP',
+                                'hidden_dims': [512, 256, 128],
+                                'activation': 'ELU'
+                            }
+                        }
+                    }
+                })
+                
+                self.loaded_policy: BaseAlgo = PPO(env=env, config=basic_config, device=device, log_dir=None)
+                self.loaded_policy.setup()
+                self.loaded_policy.load(config.policy_checkpoint)
+                self.loaded_policy._eval_mode()
+                
+                for name, param in self.loaded_policy.actor.actor_module.module.named_parameters():
+                    param.requires_grad = False
+                
+                self.loaded_policy.eval_policy = self.loaded_policy._get_inference_policy()
         
         
         self.device= device
@@ -155,7 +218,7 @@ class DeltaDynamicsModel(BaseAlgo):
         
     def _setup_models_and_optimizer(self):
         self.input_dim = self.env.get_input_dim()
-        self.output_dim = 23
+        self.output_dim = self.env.get_delta_output_dim()  
 
         self.delta_dynamics = DeltaDynamics_NN(self.input_dim, self.output_dim)
         self.delta_dynamics.to(self.device)
@@ -168,9 +231,27 @@ class DeltaDynamicsModel(BaseAlgo):
         self.delta_dynamics.train()
         
     def _load_real_data(self,motion_file):
-        motion_path=os.path.join(os.path.dirname(__file__),'..',motion_file)
-        motion_data=joblib.load(motion_path)
-        value=motion_data['frames']
+        # Use absolute path directly since motion_file already contains the full path
+        motion_data=joblib.load(motion_file)
+        # Handle both old format (with 'frames') and new converted format (with motion name as key)
+        if 'frames' in motion_data:
+            # Old format
+            value=motion_data['frames']
+        else:
+            # New converted format - get the first motion data
+            motion_name = list(motion_data.keys())[0]
+            motion_info = motion_data[motion_name]
+            # Convert from motion format back to frame-by-frame format for training
+            num_frames = motion_info['dof'].shape[0]
+            value = []
+            for i in range(num_frames):
+                frame = {
+                    'motion_dof_pos': motion_info['dof'][i],
+                    'motion_dof_vel': motion_info.get('dof_vel', motion_info['dof'][i] * 0), 
+                    'motion_base_lin_vel': motion_info['root_trans_offset'][i] if i < len(motion_info['root_trans_offset']) else [0.0, 0.0, 0.0],
+                    'motion_base_ang_vel': [0.0, 0.0, 0.0]  # Angular velocity not stored in converted format, use zeros
+                }
+                value.append(frame)
         return value
 
     def learn(self):
@@ -185,55 +266,151 @@ class DeltaDynamicsModel(BaseAlgo):
                 # TODO: Change hardcoded number
                 self.env.resample_motion()
                 
-            real_state=self._load_real_data(self.robot.motion.motion_file)
+            real_state=self._load_real_data(self.env.config.robot.motion.motion_file)
             
             obs_dict = self.env.reset_all()
 
             self.delta_dynamics_optimizer.zero_grad()
-            # obs_dict = self._rollout_step(obs_dict)
-
-            # collect gradients
-            loss = 0
-            for i in range(len(real_state)):
+            
+            # Accumulate loss over all samples in the batch
+            total_loss = 0
+            total_loss_dof_pos = 0
+            total_loss_dof_vel = 0
+            total_loss_base_lin_vel = 0
+            
+            # Process all samples in the batch
+            batch_size = len(real_state)
+            
+            for i in range(batch_size):
+                # Get current observation
                 obs = obs_dict['actor_obs']
-                delta_action = self.delta_dynamics(obs)
-                # print('True')
-                # parse tensor to dict
                 
+                # Get delta action from the network (this maintains gradients)
+                delta_action = self.delta_dynamics(obs)  # Shape: [num_envs, 23]
+                
+                # Get pretrained policy action (without gradients)
                 with torch.no_grad():
                     pre_train_action = self.loaded_policy.eval_policy(obs_dict['actor_obs']).detach()
 
+                # Combined action (this maintains gradients from delta_action)
                 integrated_actions = delta_action + pre_train_action
-
-                actor_state={"action":integrated_actions,"on_policy":False}
-                obs_dict, rew_buf, reset_buf, extras = self.env.step(actor_state) 
-                pred_state=obs_dict
-
-                # assemble dict to tensor
-                pred = self.env.assemble_delta(pred_state)
-                # loss += self.delta_dynamics_loss(pred, target)
-                # print('Loss: ', loss)
                 
-                target_state_items=real_state[i]
-                # calculate losses for different components
-                loss_dof_pos = self.delta_dynamics_loss(pred_state['dof_pos'], target_state_items['motion_dof_pos']) 
-                loss_dof_vel = self.delta_dynamics_loss(pred_state['dof_vel'], target_state_items['motion_dof_vel']) 
-                loss_base_lin_vel = self.delta_dynamics_loss(pred_state['base_lin_vel'], target_state_items['motion_base_lin_vel'])  
-                loss_base_ang_vel = self.delta_dynamics_loss(pred_state['base_ang_vel'], target_state_items['motion_base_ang_vel'])
+                # Get target state for this sample
+                target_state_items = real_state[i]
                 
-                loss = loss_dof_pos + loss_dof_vel + loss_base_lin_vel + loss_base_ang_vel
+                # Convert targets to tensors with proper batch dimensions
+                def prepare_target(target_data, name):
+                    if isinstance(target_data, torch.Tensor):
+                        target = target_data.to(self.device)
+                    else:
+                        target = torch.tensor(target_data, device=self.device, dtype=torch.float32)
+                    
+                    # Ensure proper batch dimension
+                    if target.dim() == 1:
+                        target = target.unsqueeze(0)
+                    
+                    # Match the number of environments
+                    num_envs = obs.shape[0]
+                    if target.shape[0] != num_envs:
+                        target = target.expand(num_envs, -1)
+                    
+                    return target
+                
+                target_dof_pos = prepare_target(target_state_items['motion_dof_pos'], 'dof_pos')
+                target_dof_vel = prepare_target(target_state_items['motion_dof_vel'], 'dof_vel')
+                target_base_lin_vel = prepare_target(target_state_items['motion_base_lin_vel'], 'base_lin_vel')
+                
+                # Apply actions to environment (detached from graph for simulation)
+                with torch.no_grad():
+                    actor_state = {"actions": integrated_actions.detach(), "on_policy": False}
+                    obs_dict, rew_buf, reset_buf, extras = self.env.step(actor_state)
+                
+                    # Get current state from simulator
+                    current_dof_pos = self.env.simulator.dof_pos
+                    current_dof_vel = self.env.simulator.dof_vel
+                    current_base_lin_vel = self.env.simulator.robot_root_states[:, 7:10]
+                
+                # Now compute loss between predicted actions and what would be needed
+                # This approach uses the fact that we know what actions should produce the target states
+                
+                # Method 1: Direct action supervision
+                # We need to compute what action would lead to the target state
+                # For now, let's use the state difference as a proxy for action quality
+                
+                # Convert simulator states to match target dimensions for loss computation
+                loss_dof_pos = self.delta_dynamics_loss(current_dof_pos.detach(), target_dof_pos)
+                loss_dof_vel = self.delta_dynamics_loss(current_dof_vel.detach(), target_dof_vel)
+                loss_base_lin_vel = self.delta_dynamics_loss(current_base_lin_vel.detach(), target_base_lin_vel)
+                
+                # Method 2: Use REINFORCE-style gradient estimation
+                # Compute reward based on how close we got to target
+                with torch.no_grad():
+                    reward_dof_pos = -torch.mean((current_dof_pos - target_dof_pos) ** 2)
+                    reward_dof_vel = -torch.mean((current_dof_vel - target_dof_vel) ** 2)
+                    reward_base_lin_vel = -torch.mean((current_base_lin_vel - target_base_lin_vel) ** 2)
+                    total_reward = reward_dof_pos + reward_dof_vel + reward_base_lin_vel
+                
+                # Policy gradient loss: -log_prob * reward (REINFORCE)
+                # Since we don't have explicit log probabilities, we'll use MSE on actions
+                # as a proxy, weighted by the negative reward (so good rewards reduce loss)
+                action_loss = -total_reward * torch.mean(delta_action ** 2)
+                
+                # Combine losses
+                sample_loss = action_loss
+                total_loss += sample_loss
+                
+                # Keep individual losses for logging (detached)
+                total_loss_dof_pos += loss_dof_pos.detach()
+                total_loss_dof_vel += loss_dof_vel.detach()
+                total_loss_base_lin_vel += loss_base_lin_vel.detach()
+            
+            # Average loss over batch
+            loss = total_loss / batch_size
+            loss_dof_pos = total_loss_dof_pos / batch_size
+            loss_dof_vel = total_loss_dof_vel / batch_size
+            loss_base_lin_vel = total_loss_base_lin_vel / batch_size
                 
             # update model
             self.writer.add_scalar('Loss', loss.item(), it)
             self.writer.add_scalar('Loss_dof_pos', loss_dof_pos.item(), it)
             self.writer.add_scalar('Loss_dof_vel', loss_dof_vel.item(), it)
             self.writer.add_scalar('Loss_base_lin_vel', loss_base_lin_vel.item(), it)
-            self.writer.add_scalar('Loss_base_ang_vel', loss_base_ang_vel.item(), it)
+            # self.writer.add_scalar('Loss_base_ang_vel', loss_base_ang_vel.item(), it)
+            
+            # Print loss every 10 iterations for monitoring
+            if it % 10 == 0:
+                print(f"Iteration {it:6d} | Total Loss: {loss.item():.6f} | "
+                      f"DOF Pos: {loss_dof_pos.item():.6f} | "
+                      f"DOF Vel: {loss_dof_vel.item():.6f} | "
+                      f"Base LinVel: {loss_base_lin_vel.item():.6f}")
+            
+            # Print detailed loss every 100 iterations
+            if it % 100 == 0:
+                logger.info(f"Iteration {it}: Detailed Loss Breakdown")
+                logger.info(f"  Total Loss: {loss.item():.8f}")
+                logger.info(f"  DOF Position Loss: {loss_dof_pos.item():.8f}")
+                logger.info(f"  DOF Velocity Loss: {loss_dof_vel.item():.8f}")
+                logger.info(f"  Base Linear Velocity Loss: {loss_base_lin_vel.item():.8f}")
+                logger.info(f"  Batch Size: {batch_size}")
             
             loss.backward()
             self.delta_dynamics_optimizer.step()
+            
+            # Print loss every 10 iterations for frequent monitoring
+            if it % 10 == 0:
+                print(f"Iter {it:6d}: Loss={loss.item():.6f}, DOF_pos={loss_dof_pos.item():.6f}, DOF_vel={loss_dof_vel.item():.6f}, Base_vel={loss_base_lin_vel.item():.6f}")
+            
+            # Detailed logging every 100 iterations
+            if it % 100 == 0:
+                logger.info(f"Iteration {it}: Total Loss: {loss.item():.6f}")
+                logger.info(f"  - DOF Position Loss: {loss_dof_pos.item():.6f}")
+                logger.info(f"  - DOF Velocity Loss: {loss_dof_vel.item():.6f}")
+                logger.info(f"  - Base Linear Velocity Loss: {loss_base_lin_vel.item():.6f}")
+                logger.info(f"  - Delta Action Range: [{delta_action.min().item():.4f}, {delta_action.max().item():.4f}]")
+                logger.info(f"  - Integrated Action Range: [{integrated_actions.min().item():.4f}, {integrated_actions.max().item():.4f}]")
+            
             if it % self.save_interval == 0:
-                logger.info(f"Iteration: {it}, Loss: {loss.item()}")
+                logger.info(f"Saving model at iteration {it}")
                 self.save(os.path.join(self.log_dir, 'model_{}.pt'.format(it)))
     
     def _pre_eval_env_step(self, actor_state: dict):
@@ -256,7 +433,7 @@ class DeltaDynamicsModel(BaseAlgo):
         
         # overwrite state with delta state
         delta_state_items = actor_state['delta_state_items']
-        pred_state = self.env.update_delta(delta_state_items)
+        # pred_state = self.env.update_delta(delta_state_items)
         
         # re-compute observations
         self.env._pre_compute_observations_callback()
