@@ -175,7 +175,8 @@ class PPODeltaA(PPO):
 
     def _pre_eval_env_step(self, actor_state: dict):
         actions = self.eval_policy(actor_state["obs"]['actor_obs'])
-        actions_closed_loop = self.loaded_policy.eval_policy(actor_state['obs']['closed_loop_actor_obs']).detach()
+        with torch.no_grad():
+            actions_closed_loop = self.delta_model(actor_state['obs']['actor_obs'])
 
         actor_state.update({"actions": actions, "actions_closed_loop": actions_closed_loop})
         # actor_state.update({"actions": actions, "actions_closed_loop": actions_closed_loop, "current_closed_loop_actor_obs": actor_state['obs']['closed_loop_actor_obs']})
