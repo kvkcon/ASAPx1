@@ -32,7 +32,7 @@ from humanoidverse.utils.helpers import pre_process_config
 from humanoidverse.agents.base_algo.base_algo import BaseAlgo 
 from hydra.utils import instantiate
 
-from delta_dynamics.delta_dynamics_model import DeltaDynamics_NN
+from humanoidverse.agents.delta_dynamics.delta_dynamics_model import DeltaDynamics_NN
 
 class PPODeltaA(PPO):
     def __init__(self,
