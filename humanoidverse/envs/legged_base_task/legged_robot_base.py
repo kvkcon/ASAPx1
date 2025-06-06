@@ -222,7 +222,7 @@ class LeggedRobotBase(BaseTask):
 
         #a_t=a^sim+delta_a
         actions = actor_state["actions"]        
-        delta_action = actor_state["delta_state_items"]
+        delta_action = actor_state["actions_closed_loop"]
         composed_action = actions+delta_action
         self._pre_physics_step(composed_action)
         self._physics_step()
