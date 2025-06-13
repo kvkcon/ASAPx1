@@ -41,9 +41,10 @@ class PPODeltaA(PPO):
                  log_dir=None,
                  device='cpu'):
         super().__init__(env, config, log_dir, device)
-    
-        self._load_pretrain_policy(config.policy_checkpoint)
-        self.delta_model=self._load_delta_model(config.delta_checkpoint)
+        
+        # Store the checkpoint paths for later loading
+        self.policy_checkpoint_path = config.policy_checkpoint
+        self.delta_checkpoint_path = config.delta_checkpoint
 
         # ----------------- UNCOMMENT THIS FOR ANALYTIC SEARCH FOR OPTIMAL ACTION BASED ON DELTA_A -----------------
         # if not hasattr(env, 'loaded_extra_policy'):
@@ -54,6 +55,14 @@ class PPODeltaA(PPO):
         # ----------------- UNCOMMENT THIS FOR ANALYTIC SEARCH FOR OPTIMAL ACTION BASED ON DELTA_A -----------------    
         
     
+    def setup(self):
+        # Call parent setup first to create actor and critic
+        super().setup()
+        
+        # Now load the pretrained weights
+        self._load_pretrain_policy(self.policy_checkpoint_path)
+        self.delta_model = self._load_delta_model(self.delta_checkpoint_path)
+
     # def _actor_act_step(self, obs_dict):
     #     actions = self.actor.act(obs_dict["actor_obs"])
     #     return self.actor.act_inference(obs_dict["actor_obs"])
