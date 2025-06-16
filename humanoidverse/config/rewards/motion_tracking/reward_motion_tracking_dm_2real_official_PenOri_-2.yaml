@@ -22,7 +22,7 @@ rewards:
       penalty_action_rate: -0.5 # need to be tuned up to -0.5 for real robot
       # penalty_feet_contact_forces: -0.01
       # penalty_stumble: -10.0
-      #penalty_orientation: -2.0
+      penalty_orientation: -2.0 
       # better for landing
       penalty_feet_ori: -2.0
       feet_heading_alignment: -0.1
