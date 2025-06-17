@@ -100,7 +100,7 @@ HYDRA_FULL_ERROR=1 python humanoidverse/train_agent.py \
 num_envs=1 \
 project_name=TestIsaacGymInstallation \
 experiment_name=G123dof_loco \
-headless=False
+headless=True
 ```
 <details>
 <summary>Note:</summary>
